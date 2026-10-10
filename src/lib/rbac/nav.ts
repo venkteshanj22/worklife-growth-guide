@@ -65,6 +65,13 @@ export const SOON_LABELS: Record<string, string> = Object.fromEntries(
   ]),
 );
 
+export const SOON_PERMISSIONS: Record<string, string> = Object.fromEntries(
+  STAFF_NAV.flatMap((g) => [
+    ...(g.soon ? [[g.soon, g.permission]] : []),
+    ...(g.children ?? []).filter((c) => c.soon).map((c) => [c.soon!, c.permission]),
+  ]),
+);
+
 export interface PortalNavItem { label: string; icon: LucideIcon; slug?: string }
 export const PORTAL_NAV: PortalNavItem[] = [
   { label: "Home", icon: Home },

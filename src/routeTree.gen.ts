@@ -19,6 +19,7 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as AuthenticatedAppDashboardRouteImport } from './routes/_authenticated/app.dashboard'
+import { Route as AuthenticatedAppRolesRouteImport } from './routes/_authenticated/app.roles'
 import { Route as AuthenticatedAppUsersRouteImport } from './routes/_authenticated/app.users'
 import { Route as AuthenticatedAppSoonSectionRouteImport } from './routes/_authenticated/app.soon.$section'
 
@@ -72,6 +73,11 @@ const AuthenticatedAppDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppRolesRoute = AuthenticatedAppRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppUsersRoute = AuthenticatedAppUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/roles': typeof AuthenticatedAppRolesRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/app/': typeof AuthenticatedAppIndexRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/setup': typeof SetupRoute
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/roles': typeof AuthenticatedAppRolesRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/_authenticated/app/roles': typeof AuthenticatedAppRolesRoute
   '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_authenticated/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/app'
     | '/app/dashboard'
+    | '/app/roles'
     | '/app/users'
     | '/app/'
     | '/app/soon/$section'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/setup'
     | '/app/dashboard'
+    | '/app/roles'
     | '/app/users'
     | '/app'
     | '/app/soon/$section'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/_authenticated/app'
     | '/_authenticated/app/dashboard'
+    | '/_authenticated/app/roles'
     | '/_authenticated/app/users'
     | '/_authenticated/app/'
     | '/_authenticated/app/soon/$section'
@@ -248,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppDashboardRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/roles': {
+      id: '/_authenticated/app/roles'
+      path: '/roles'
+      fullPath: '/app/roles'
+      preLoaderRoute: typeof AuthenticatedAppRolesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/users': {
       id: '/_authenticated/app/users'
       path: '/users'
@@ -267,6 +286,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppDashboardRoute: typeof AuthenticatedAppDashboardRoute
+  AuthenticatedAppRolesRoute: typeof AuthenticatedAppRolesRoute
   AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppSoonSectionRoute: typeof AuthenticatedAppSoonSectionRoute
@@ -274,6 +294,7 @@ interface AuthenticatedAppRouteChildren {
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppDashboardRoute: AuthenticatedAppDashboardRoute,
+  AuthenticatedAppRolesRoute: AuthenticatedAppRolesRoute,
   AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppSoonSectionRoute: AuthenticatedAppSoonSectionRoute,
