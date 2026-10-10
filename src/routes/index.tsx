@@ -1,24 +1,25 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { FullPageLoader } from "@/components/app/shared";
+import { supabase } from "@/integrations/supabase/client";
+import { currentUserQuery } from "@/lib/auth/current-user";
+import { homePathFor, isSignInAllowed } from "@/lib/rbac/permissions";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  ssr: false,
+  head: () => ({
+    meta: [
+      { title: "CareerOS — Career Journey Management Platform" },
+      { name: "description", content: "CareerOS by Coding361: manage every candidate's career journey." },
+      { property: "og:title", content: "CareerOS — Career Journey Management Platform" },
+      { property: "og:description", content: "CareerOS by Coding361: manage every candidate's career journey." },
+    ],
+  }),
+  beforeLoad: async ({ context }) => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/login" });
+    const user = await context.queryClient.fetchQuery(currentUserQuery);
+    if (!user || !isSignInAllowed(user.status)) throw redirect({ to: "/login" });
+    throw redirect({ to: homePathFor(user) });
+  },
+  component: FullPageLoader,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
