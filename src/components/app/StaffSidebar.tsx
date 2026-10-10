@@ -13,7 +13,7 @@ function visibleChildren(g: NavGroup, user: CurrentUser) {
 const itemCls = "flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground";
 const activeCls = "bg-sidebar-accent font-medium text-sidebar-accent-foreground";
 
-function LeafLink({ leaf, onNavigate, nested }: { leaf: NavLeaf | NavGroup; onNavigate?: () => void; nested?: boolean }) {
+function LeafLink({ leaf, onNavigate, nested }: { leaf: NavLeaf | NavGroup; onNavigate?: (() => void) | undefined; nested?: boolean }) {
   const content = (
     <>
       {"icon" in leaf && leaf.icon ? <leaf.icon className="size-4 shrink-0 opacity-70" /> : null}
@@ -30,7 +30,7 @@ function LeafLink({ leaf, onNavigate, nested }: { leaf: NavLeaf | NavGroup; onNa
   );
 }
 
-function Group({ g, user, onNavigate }: { g: NavGroup; user: CurrentUser; onNavigate?: () => void }) {
+function Group({ g, user, onNavigate }: { g: NavGroup; user: CurrentUser; onNavigate?: (() => void) | undefined }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const kids = visibleChildren(g, user);
   const containsActive = kids.some((k) => (k.to && pathname.startsWith(k.to)) || (k.soon && pathname.endsWith(`/${k.soon}`)));
@@ -47,7 +47,7 @@ function Group({ g, user, onNavigate }: { g: NavGroup; user: CurrentUser; onNavi
   );
 }
 
-export function StaffSidebar({ user, onNavigate }: { user: CurrentUser; onNavigate?: () => void }) {
+export function StaffSidebar({ user, onNavigate }: { user: CurrentUser; onNavigate?: (() => void) | undefined }) {
   const groups = STAFF_NAV.filter((g) => (g.children ? visibleChildren(g, user).length > 0 : can(user, g.permission)));
   return (
     <div className="flex h-full flex-col">

@@ -65,11 +65,11 @@ export function UserFormDialog({ open, onOpenChange, user, roles, canAssignSuper
           <DialogDescription>{user ? "Update this user's details and role." : "The user will receive an email invitation to set their password."}</DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2" noValidate>
-          <Field label="Full name" error={errors.full_name} className="sm:col-span-2"><Input value={form.full_name} onChange={(e) => set("full_name")(e.target.value)} /></Field>
-          <Field label="User ID" error={errors.user_code}><Input placeholder="EMP001" value={form.user_code} onChange={(e) => set("user_code")(e.target.value)} /></Field>
-          <Field label="Mobile" error={errors.mobile}><Input type="tel" value={form.mobile} onChange={(e) => set("mobile")(e.target.value)} /></Field>
-          <Field label="Email" error={errors.email} className="sm:col-span-2"><Input type="email" value={form.email} onChange={(e) => set("email")(e.target.value)} /></Field>
-          <Field label="Role" error={errors.role_id}>
+          <Field label="Full name" error={errors["full_name"]} className="sm:col-span-2"><Input value={form.full_name} onChange={(e) => set("full_name")(e.target.value)} /></Field>
+          <Field label="User ID" error={errors["user_code"]}><Input placeholder="EMP001" value={form.user_code} onChange={(e) => set("user_code")(e.target.value)} /></Field>
+          <Field label="Mobile" error={errors["mobile"]}><Input type="tel" value={form.mobile} onChange={(e) => set("mobile")(e.target.value)} /></Field>
+          <Field label="Email" error={errors["email"]} className="sm:col-span-2"><Input type="email" value={form.email} onChange={(e) => set("email")(e.target.value)} /></Field>
+          <Field label="Role" error={errors["role_id"]}>
             <Select value={form.role_id} onValueChange={set("role_id")}>
               <SelectTrigger><SelectValue placeholder="Select role" /></SelectTrigger>
               <SelectContent>{assignable.map((r) => <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>)}</SelectContent>
@@ -97,7 +97,7 @@ export function UserFormDialog({ open, onOpenChange, user, roles, canAssignSuper
   );
 }
 
-function Field({ label, error, className, children }: { label: string; error?: string; className?: string; children: React.ReactNode }) {
+function Field({ label, error, className, children }: { label: string; error?: string | undefined; className?: string; children: React.ReactNode }) {
   return (
     <div className={`space-y-1.5 ${className ?? ""}`}>
       <Label>{label}</Label>

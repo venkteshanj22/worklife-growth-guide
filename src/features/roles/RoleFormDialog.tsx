@@ -24,7 +24,7 @@ export function RoleFormDialog({ open, onOpenChange, role }: { open: boolean; on
   }, [open, role]);
 
   const m = useMutation({
-    mutationFn: () => (role ? updateFn({ data: { ...form, id: role.id } }) : createFn({ data: form })),
+    mutationFn: async (): Promise<unknown> => (role ? updateFn({ data: { ...form, id: role.id } }) : createFn({ data: form })),
     onSuccess: () => { toast.success(role ? "Role updated" : "Role created"); qc.invalidateQueries({ queryKey: ["roles"] }); onOpenChange(false); },
     onError: (e) => toast.error(e.message),
   });
