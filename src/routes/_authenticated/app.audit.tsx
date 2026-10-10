@@ -21,10 +21,10 @@ const PAGE = 20;
 const ALL = "__all";
 
 function describe(meta: Record<string, unknown>) {
-  if ("permission" in meta) return `${meta.permission} → ${meta.enabled ? "granted" : "revoked"}`;
-  if ("from" in meta && "to" in meta) return `${meta.from ?? "—"} → ${meta.to}`;
-  if ("changes" in meta && meta.changes && typeof meta.changes === "object") return `Changed: ${Object.keys(meta.changes).join(", ")}`;
-  if ("role" in meta) return `Role: ${meta.role}`;
+  if ("permission" in meta) return `${meta["permission"]} → ${meta["enabled"] ? "granted" : "revoked"}`;
+  if ("from" in meta && "to" in meta) return `${meta["from"] ?? "—"} → ${meta["to"]}`;
+  if ("changes" in meta && meta["changes"] && typeof meta["changes"] === "object") return `Changed: ${Object.keys(meta["changes"]).join(", ")}`;
+  if ("role" in meta) return `Role: ${meta["role"]}`;
   return "";
 }
 
