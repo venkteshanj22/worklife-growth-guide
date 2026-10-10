@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState, ErrorState, PageHeader, Panel, StatusBadge, formatDate } from "@/components/app/shared";
 import { listUsers, setUserStatus, type UserRow } from "@/lib/admin/users.functions";
-import { listRoles } from "@/lib/admin/roles.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/lib/auth/use-current-user";
 import { PERMISSIONS, SUPER_ADMIN_ROLE, type UserStatus } from "@/lib/rbac/permissions";
 import { UserFormDialog } from "./UserFormDialog";
@@ -28,7 +28,6 @@ export function UsersPage() {
   const { user: me, can } = useCurrentUser();
   const qc = useQueryClient();
   const listFn = useServerFn(listUsers);
-  const rolesFn = useServerFn(listRoles);
   const statusFn = useServerFn(setUserStatus);
   const [search, setSearch] = useState("");
   const [roleId, setRoleId] = useState(ALL);
@@ -41,7 +40,14 @@ export function UsersPage() {
 
   const filters = { search, roleId: roleId === ALL ? "" : roleId, status: status === ALL ? "" : status, page, pageSize: PAGE_SIZE };
   const users = useQuery({ queryKey: ["users", filters], queryFn: () => listFn({ data: filters }), placeholderData: keepPreviousData });
-  const roles = useQuery({ queryKey: ["roles"], queryFn: () => rolesFn(), enabled: can(PERMISSIONS.rolesView) || can(PERMISSIONS.usersCreate) || can(PERMISSIONS.usersEdit) });
+  const roles = useQuery({
+    queryKey: ["roles", "options"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("roles").select("id, name, key, is_active").order("sort_order").order("name");
+      if (error) throw error;
+      return data;
+    },
+  });
   const roleOptions = roles.data ?? [];
 
   const statusMutation = useMutation({
