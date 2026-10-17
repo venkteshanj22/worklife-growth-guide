@@ -22,7 +22,13 @@ import {
 } from "@/lib/candidates/candidates.functions";
 import { STATUSES, ASSIGNMENT_TYPES, label } from "@/lib/candidates/model";
 import { Choice } from "./Fields";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { detailQuery } from "./queries";
 export type ActionKind = "status" | "assign" | "portal";
+export function CandidateListActions({ id, kind, options, onClose }: { id: string; kind: ActionKind; options: CandidateOptions; onClose: () => void }) {
+  const { data } = useSuspenseQuery(detailQuery(id));
+  return <CandidateActions id={id} kind={kind} status={data.candidate.journey_status} options={options} detail={data} onClose={onClose} />;
+}
 export function CandidateActions({
   kind,
   onClose,
@@ -40,7 +46,7 @@ export function CandidateActions({
 }) {
   const [next, setNext] = useState(status);
   const [type, setType] = useState<(typeof ASSIGNMENT_TYPES)[number]>("career_consultant");
-  const [staff, setStaff] = useState("");
+  const [staff, setStaff] = useState(detail?.assignments.find(a => a.assignment_type === "career_consultant")?.user_id ?? "");
   const [portalUser, setPortalUser] = useState("");
   const [mode, setMode] = useState("LINK");
   const [remarks, setRemarks] = useState("");
@@ -115,7 +121,7 @@ export function CandidateActions({
                 value={type}
                 onChange={(v) => {
                   setType(ASSIGNMENT_TYPES.find((t) => t === v) ?? "career_consultant");
-                  setStaff("");
+                  setStaff(detail?.assignments.find(a => a.assignment_type === v)?.user_id ?? "");
                 }}
                 items={ASSIGNMENT_TYPES.map((t) => ({ value: t, label: label(t) }))}
               />

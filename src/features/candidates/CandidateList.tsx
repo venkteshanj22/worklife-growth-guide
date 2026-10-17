@@ -27,7 +27,7 @@ import { STATUSES, ACTIVE_STATUSES, label } from "@/lib/candidates/model";
 import { listSchema } from "@/lib/candidates/candidates.functions";
 import { candidatesQuery, optionsQuery } from "./queries";
 import { Badge, Choice } from "./Fields";
-import { CandidateActions, type ActionKind } from "./CandidateActions";
+import { CandidateListActions, type ActionKind } from "./CandidateActions";
 export function CandidateList({ active = false }: { active?: boolean }) {
   const { user } = useCurrentUser();
   const { data: options } = useSuspenseQuery(optionsQuery);
@@ -368,10 +368,9 @@ export function CandidateList({ active = false }: { active?: boolean }) {
         </div>
       </div>
       {action && (
-        <CandidateActions
+        <CandidateListActions
           key={`${action.id}-${action.kind}`}
           id={action.id}
-          status={action.status}
           kind={action.kind}
           options={options}
           onClose={() => setAction(null)}
