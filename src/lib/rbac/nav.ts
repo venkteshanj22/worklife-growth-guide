@@ -8,7 +8,7 @@ import { PERMISSIONS } from "./permissions";
 export interface NavLeaf {
   label: string;
   /** Functional route, or undefined for a Coming Soon placeholder. */
-  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings";
+  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active";
   soon?: string;
   permission: string;
 }
@@ -27,7 +27,7 @@ export const STAFF_NAV: NavGroup[] = [
   { label: "Dashboard", icon: LayoutDashboard, permission: PERMISSIONS.dashboardView, to: "/app/dashboard" },
   {
     label: "Candidates", icon: Users, permission: PERMISSIONS.candidatesView,
-    children: ["All Candidates", "Active", "Roadmap", "Opportunity Phase", "Completed"].map((l) => ({ label: l, soon: `candidates-${s(l)}`, permission: PERMISSIONS.candidatesView })),
+    children: [{ label: "All Candidates", to: "/app/candidates", permission: PERMISSIONS.candidatesView }, { label: "Active", to: "/app/candidates/active", permission: PERMISSIONS.candidatesView }, ...["Roadmap", "Opportunity Phase", "Completed"].map((l) => ({ label: l, soon: `candidates-${s(l)}`, permission: PERMISSIONS.candidatesView }))],
   },
   {
     label: "PCB Studio", icon: Compass, permission: PERMISSIONS.pcbView,

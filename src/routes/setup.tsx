@@ -12,6 +12,8 @@ import { bootstrapSuperAdmin, getSetupStatus } from "@/lib/admin/setup.functions
 export const Route = createFileRoute("/setup")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "First-time setup — CareerOS" },
       { name: "description", content: "Create the first CareerOS Super Admin account." },
       { property: "og:title", content: "First-time setup — CareerOS" },

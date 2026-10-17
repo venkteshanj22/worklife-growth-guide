@@ -8,6 +8,8 @@ export const Route = createFileRoute("/")({
   ssr: false,
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "CareerOS — Career Journey Management Platform" },
       { name: "description", content: "CareerOS by Coding361: manage every candidate's career journey." },
       { property: "og:title", content: "CareerOS — Career Journey Management Platform" },

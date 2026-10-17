@@ -18,3 +18,7 @@
 - Sidebar is declarative config in `src/lib/rbac/nav.ts`; future modules render the shared Coming Soon route until built. Why: no fake features.
 - Inactive/suspended users are banned in auth and blocked by `is_active_user`. Why: status must stop access, not just login.
 - Features live in `src/features/<module>`; routes stay thin. Why: avoid giant components.
+
+- Candidate Master uses normalized business tables independent from profiles; client-safe modules live in src/lib/candidates and screens in src/features/candidates. Why: portal identity and business records have different lifecycles.
+- Candidate mutations use authenticated database RPC transactions with permission and row-scope checks, activity and audit in the same transaction. Why: prevent partial saves and missing history.
+- Candidate record access uses can_read_candidate with view_all or applicable assignments; portal summaries expose an explicit four-field projection only. Why: least-privilege personal data access.
