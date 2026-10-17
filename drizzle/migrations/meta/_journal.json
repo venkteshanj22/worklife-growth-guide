@@ -36,6 +36,13 @@
       "when": 1792262245598,
       "tag": "0004_master_track_library",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792263387071,
+      "tag": "0005_pcb_studio",
+      "breakpoints": true
     }
   ]
 }
