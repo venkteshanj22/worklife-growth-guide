@@ -21,8 +21,8 @@ import {
 import { detailQuery, optionsQuery } from "./queries";
 import { Badge } from "./Fields";
 import { CandidateActions, type ActionKind } from "./CandidateActions";
+import { AssessmentTab } from "@/features/assessments/AssessmentTab";
 const FUTURE = [
-  "Assessment",
   "PCB",
   "Roadmap",
   "Weekly Reviews",
@@ -119,7 +119,7 @@ export function CandidateDetailPage({ id }: { id: string }) {
       <Tabs defaultValue="Overview">
         <div className="overflow-x-auto border-b">
           <TabsList className="h-auto w-max justify-start rounded-none bg-transparent p-0">
-            {["Overview", ...FUTURE, "Activity"].map((t) => (
+            {["Overview", "Assessment", ...FUTURE, "Activity"].map((t) => (
               <TabsTrigger
                 key={t}
                 value={t}
@@ -209,6 +209,9 @@ export function CandidateDetailPage({ id }: { id: string }) {
               }}
             />
           </div>
+        </TabsContent>
+        <TabsContent value="Assessment" className="mt-6">
+          <AssessmentTab candidateId={id} />
         </TabsContent>
         {FUTURE.map((t) => (
           <TabsContent key={t} value={t}>

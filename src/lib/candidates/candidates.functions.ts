@@ -317,5 +317,6 @@ export const myCandidateSummary = createServerFn({ method: "GET" })
       candidate_code: string;
       program_plan: string | null;
       journey_status: string;
+      assessment_completed?: boolean;
     } | null;
   });
