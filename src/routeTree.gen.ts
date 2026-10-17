@@ -22,6 +22,7 @@ import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAppAuditRouteImport } from './routes/_authenticated/app.audit'
 import { Route as AuthenticatedAppCandidatesRouteImport } from './routes/_authenticated/app.candidates'
 import { Route as AuthenticatedAppDashboardRouteImport } from './routes/_authenticated/app.dashboard'
+import { Route as AuthenticatedAppPcbContentRouteImport } from './routes/_authenticated/app.pcb-content'
 import { Route as AuthenticatedAppRolesRouteImport } from './routes/_authenticated/app.roles'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppUsersRouteImport } from './routes/_authenticated/app.users'
@@ -32,6 +33,8 @@ import { Route as AuthenticatedAppCandidatesIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedAppCandidatesActiveRouteImport } from './routes/_authenticated/app.candidates.active'
 import { Route as AuthenticatedAppCandidatesNewRouteImport } from './routes/_authenticated/app.candidates.new'
 import { Route as AuthenticatedAppSoonSectionRouteImport } from './routes/_authenticated/app.soon.$section'
+import { Route as AuthenticatedAppTracksIndexRouteImport } from './routes/_authenticated/app.tracks.index'
+import { Route as AuthenticatedAppTracksIdRouteImport } from './routes/_authenticated/app.tracks.$id'
 import { Route as AuthenticatedAppCandidatesIdEditRouteImport } from './routes/_authenticated/app.candidates.$id_.edit'
 import { Route as AuthenticatedAppCandidatesIdAssessmentsAidRouteImport } from './routes/_authenticated/app.candidates.$id_.assessments.$aid'
 
@@ -101,6 +104,12 @@ const AuthenticatedAppDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppPcbContentRoute =
+  AuthenticatedAppPcbContentRouteImport.update({
+    id: '/pcb-content',
+    path: '/pcb-content',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppRolesRoute = AuthenticatedAppRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -159,6 +168,18 @@ const AuthenticatedAppSoonSectionRoute =
     path: '/soon/$section',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppTracksIndexRoute =
+  AuthenticatedAppTracksIndexRouteImport.update({
+    id: '/tracks/',
+    path: '/tracks/',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppTracksIdRoute =
+  AuthenticatedAppTracksIdRouteImport.update({
+    id: '/tracks/$id',
+    path: '/tracks/$id',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppCandidatesIdEditRoute =
   AuthenticatedAppCandidatesIdEditRouteImport.update({
     id: '/$id_/edit',
@@ -184,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/app/audit': typeof AuthenticatedAppAuditRoute
   '/app/candidates': typeof AuthenticatedAppCandidatesRouteWithChildren
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/pcb-content': typeof AuthenticatedAppPcbContentRoute
   '/app/roles': typeof AuthenticatedAppRolesRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
@@ -194,7 +216,9 @@ export interface FileRoutesByFullPath {
   '/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
+  '/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
+  '/app/tracks/': typeof AuthenticatedAppTracksIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
@@ -207,6 +231,7 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/app/audit': typeof AuthenticatedAppAuditRoute
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/pcb-content': typeof AuthenticatedAppPcbContentRoute
   '/app/roles': typeof AuthenticatedAppRolesRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
@@ -217,7 +242,9 @@ export interface FileRoutesByTo {
   '/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
+  '/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/app/candidates': typeof AuthenticatedAppCandidatesIndexRoute
+  '/app/tracks': typeof AuthenticatedAppTracksIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
@@ -235,6 +262,7 @@ export interface FileRoutesById {
   '/_authenticated/app/audit': typeof AuthenticatedAppAuditRoute
   '/_authenticated/app/candidates': typeof AuthenticatedAppCandidatesRouteWithChildren
   '/_authenticated/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/_authenticated/app/pcb-content': typeof AuthenticatedAppPcbContentRoute
   '/_authenticated/app/roles': typeof AuthenticatedAppRolesRoute
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
@@ -245,7 +273,9 @@ export interface FileRoutesById {
   '/_authenticated/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/_authenticated/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
   '/_authenticated/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
+  '/_authenticated/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/_authenticated/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
+  '/_authenticated/app/tracks/': typeof AuthenticatedAppTracksIndexRoute
   '/_authenticated/app/candidates/$id_/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/_authenticated/app/candidates/$id_/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
@@ -263,6 +293,7 @@ export interface FileRouteTypes {
     | '/app/audit'
     | '/app/candidates'
     | '/app/dashboard'
+    | '/app/pcb-content'
     | '/app/roles'
     | '/app/settings'
     | '/app/users'
@@ -273,7 +304,9 @@ export interface FileRouteTypes {
     | '/app/candidates/active'
     | '/app/candidates/new'
     | '/app/soon/$section'
+    | '/app/tracks/$id'
     | '/app/candidates/'
+    | '/app/tracks/'
     | '/app/candidates/$id/edit'
     | '/app/candidates/$id/assessments/$aid'
   fileRoutesByTo: FileRoutesByTo
@@ -286,6 +319,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/app/audit'
     | '/app/dashboard'
+    | '/app/pcb-content'
     | '/app/roles'
     | '/app/settings'
     | '/app/users'
@@ -296,7 +330,9 @@ export interface FileRouteTypes {
     | '/app/candidates/active'
     | '/app/candidates/new'
     | '/app/soon/$section'
+    | '/app/tracks/$id'
     | '/app/candidates'
+    | '/app/tracks'
     | '/app/candidates/$id/edit'
     | '/app/candidates/$id/assessments/$aid'
   id:
@@ -313,6 +349,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/audit'
     | '/_authenticated/app/candidates'
     | '/_authenticated/app/dashboard'
+    | '/_authenticated/app/pcb-content'
     | '/_authenticated/app/roles'
     | '/_authenticated/app/settings'
     | '/_authenticated/app/users'
@@ -323,7 +360,9 @@ export interface FileRouteTypes {
     | '/_authenticated/app/candidates/active'
     | '/_authenticated/app/candidates/new'
     | '/_authenticated/app/soon/$section'
+    | '/_authenticated/app/tracks/$id'
     | '/_authenticated/app/candidates/'
+    | '/_authenticated/app/tracks/'
     | '/_authenticated/app/candidates/$id_/edit'
     | '/_authenticated/app/candidates/$id_/assessments/$aid'
   fileRoutesById: FileRoutesById
@@ -431,6 +470,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppDashboardRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/pcb-content': {
+      id: '/_authenticated/app/pcb-content'
+      path: '/pcb-content'
+      fullPath: '/app/pcb-content'
+      preLoaderRoute: typeof AuthenticatedAppPcbContentRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/roles': {
       id: '/_authenticated/app/roles'
       path: '/roles'
@@ -501,6 +547,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSoonSectionRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/tracks/': {
+      id: '/_authenticated/app/tracks/'
+      path: '/tracks'
+      fullPath: '/app/tracks/'
+      preLoaderRoute: typeof AuthenticatedAppTracksIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/tracks/$id': {
+      id: '/_authenticated/app/tracks/$id'
+      path: '/tracks/$id'
+      fullPath: '/app/tracks/$id'
+      preLoaderRoute: typeof AuthenticatedAppTracksIdRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/candidates/$id_/edit': {
       id: '/_authenticated/app/candidates/$id_/edit'
       path: '/$id/edit'
@@ -549,22 +609,28 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppAuditRoute: typeof AuthenticatedAppAuditRoute
   AuthenticatedAppCandidatesRoute: typeof AuthenticatedAppCandidatesRouteWithChildren
   AuthenticatedAppDashboardRoute: typeof AuthenticatedAppDashboardRoute
+  AuthenticatedAppPcbContentRoute: typeof AuthenticatedAppPcbContentRoute
   AuthenticatedAppRolesRoute: typeof AuthenticatedAppRolesRoute
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppSoonSectionRoute: typeof AuthenticatedAppSoonSectionRoute
+  AuthenticatedAppTracksIdRoute: typeof AuthenticatedAppTracksIdRoute
+  AuthenticatedAppTracksIndexRoute: typeof AuthenticatedAppTracksIndexRoute
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppAuditRoute: AuthenticatedAppAuditRoute,
   AuthenticatedAppCandidatesRoute: AuthenticatedAppCandidatesRouteWithChildren,
   AuthenticatedAppDashboardRoute: AuthenticatedAppDashboardRoute,
+  AuthenticatedAppPcbContentRoute: AuthenticatedAppPcbContentRoute,
   AuthenticatedAppRolesRoute: AuthenticatedAppRolesRoute,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppSoonSectionRoute: AuthenticatedAppSoonSectionRoute,
+  AuthenticatedAppTracksIdRoute: AuthenticatedAppTracksIdRoute,
+  AuthenticatedAppTracksIndexRoute: AuthenticatedAppTracksIndexRoute,
 }
 
 const AuthenticatedAppRouteWithChildren =

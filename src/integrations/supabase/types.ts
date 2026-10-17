@@ -1310,6 +1310,231 @@ export type Database = {
           },
         ]
       }
+      global_pcb_content: {
+        Row: {
+          code: string
+          content: string | null
+          content_type: string
+          created_at: string
+          id: string
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+          version: number
+        }
+        Insert: {
+          code: string
+          content?: string | null
+          content_type?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Update: {
+          code?: string
+          content?: string | null
+          content_type?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Relationships: []
+      }
+      global_pcb_content_versions: {
+        Row: {
+          content: string | null
+          content_id: string
+          content_type: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          status: string | null
+          title: string
+          version: number
+        }
+        Insert: {
+          content?: string | null
+          content_id: string
+          content_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          version: number
+        }
+        Update: {
+          content?: string | null
+          content_id?: string
+          content_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "global_pcb_content_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "global_pcb_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      master_track_versions: {
+        Row: {
+          alt_roles: string | null
+          category: string
+          change_summary: string | null
+          created_at: string
+          created_by: string | null
+          created_from_version: string | null
+          daily_hours: number | null
+          description: string | null
+          duration_days: number
+          effective_date: string | null
+          experience_level: string | null
+          id: string
+          name: string
+          prereq_communication: string | null
+          prereq_daily_time: string | null
+          prereq_education: string | null
+          prereq_infrastructure: string | null
+          prereq_knowledge: string | null
+          prereq_logical: string | null
+          prereq_other: string | null
+          primary_role: string | null
+          short_name: string | null
+          status: string
+          track_id: string
+          updated_at: string
+          updated_by: string | null
+          version: string
+          weekly_days: number | null
+        }
+        Insert: {
+          alt_roles?: string | null
+          category?: string
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_from_version?: string | null
+          daily_hours?: number | null
+          description?: string | null
+          duration_days?: number
+          effective_date?: string | null
+          experience_level?: string | null
+          id?: string
+          name: string
+          prereq_communication?: string | null
+          prereq_daily_time?: string | null
+          prereq_education?: string | null
+          prereq_infrastructure?: string | null
+          prereq_knowledge?: string | null
+          prereq_logical?: string | null
+          prereq_other?: string | null
+          primary_role?: string | null
+          short_name?: string | null
+          status?: string
+          track_id: string
+          updated_at?: string
+          updated_by?: string | null
+          version: string
+          weekly_days?: number | null
+        }
+        Update: {
+          alt_roles?: string | null
+          category?: string
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_from_version?: string | null
+          daily_hours?: number | null
+          description?: string | null
+          duration_days?: number
+          effective_date?: string | null
+          experience_level?: string | null
+          id?: string
+          name?: string
+          prereq_communication?: string | null
+          prereq_daily_time?: string | null
+          prereq_education?: string | null
+          prereq_infrastructure?: string | null
+          prereq_knowledge?: string | null
+          prereq_logical?: string | null
+          prereq_other?: string | null
+          primary_role?: string | null
+          short_name?: string | null
+          status?: string
+          track_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: string
+          weekly_days?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "master_track_versions_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "master_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      master_tracks: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          current_version_id: string | null
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "master_tracks_current_fk"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissions: {
         Row: {
           created_at: string
@@ -1457,6 +1682,563 @@ export type Database = {
         }
         Relationships: []
       }
+      track_content_blocks: {
+        Row: {
+          block_type: string
+          content: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          version_id: string
+        }
+        Insert: {
+          block_type?: string
+          content?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          version_id: string
+        }
+        Update: {
+          block_type?: string
+          content?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_content_blocks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_milestones: {
+        Row: {
+          description: string | null
+          evidence: string | null
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+          target_day: number | null
+          version_id: string
+        }
+        Insert: {
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+          target_day?: number | null
+          version_id: string
+        }
+        Update: {
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+          target_day?: number | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_milestones_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_modules: {
+        Row: {
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          objective: string | null
+          phase_id: string
+          sort_order: number
+          suggested_duration: string | null
+          version_id: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          objective?: string | null
+          phase_id: string
+          sort_order?: number
+          suggested_duration?: string | null
+          version_id: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          objective?: string | null
+          phase_id?: string
+          sort_order?: number
+          suggested_duration?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_modules_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "track_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_modules_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_outcomes: {
+        Row: {
+          description: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          version_id: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          version_id: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_outcomes_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_phases: {
+        Row: {
+          end_day: number | null
+          id: string
+          is_active: boolean
+          name: string
+          objective: string | null
+          phase_number: number | null
+          short_description: string | null
+          sort_order: number
+          start_day: number | null
+          version_id: string
+        }
+        Insert: {
+          end_day?: number | null
+          id?: string
+          is_active?: boolean
+          name: string
+          objective?: string | null
+          phase_number?: number | null
+          short_description?: string | null
+          sort_order?: number
+          start_day?: number | null
+          version_id: string
+        }
+        Update: {
+          end_day?: number | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          objective?: string | null
+          phase_number?: number | null
+          short_description?: string | null
+          sort_order?: number
+          start_day?: number | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_phases_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_project_templates: {
+        Row: {
+          deliverables: string | null
+          description: string | null
+          difficulty: string | null
+          end_day: number | null
+          features: string | null
+          id: string
+          is_active: boolean
+          name: string
+          project_type: string
+          scenario: string | null
+          sort_order: number
+          start_day: number | null
+          technologies: string | null
+          version_id: string
+        }
+        Insert: {
+          deliverables?: string | null
+          description?: string | null
+          difficulty?: string | null
+          end_day?: number | null
+          features?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          project_type?: string
+          scenario?: string | null
+          sort_order?: number
+          start_day?: number | null
+          technologies?: string | null
+          version_id: string
+        }
+        Update: {
+          deliverables?: string | null
+          description?: string | null
+          difficulty?: string | null
+          end_day?: number | null
+          features?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          project_type?: string
+          scenario?: string | null
+          sort_order?: number
+          start_day?: number | null
+          technologies?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_project_templates_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_resource_mappings: {
+        Row: {
+          id: string
+          is_active: boolean
+          module_id: string | null
+          phase_id: string | null
+          resource_id: string
+          roadmap_item_id: string | null
+          sort_order: number
+          version_id: string
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id: string
+          roadmap_item_id?: string | null
+          sort_order?: number
+          version_id: string
+        }
+        Update: {
+          id?: string
+          is_active?: boolean
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id?: string
+          roadmap_item_id?: string | null
+          sort_order?: number
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_resource_mappings_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "track_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_resource_mappings_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "track_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_resource_mappings_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "track_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_resource_mappings_roadmap_item_id_fkey"
+            columns: ["roadmap_item_id"]
+            isOneToOne: false
+            referencedRelation: "track_roadmap_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_resource_mappings_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_resources: {
+        Row: {
+          course_name: string | null
+          end_ref: string | null
+          estimated_cost: number | null
+          id: string
+          is_active: boolean
+          is_paid: boolean
+          name: string
+          notes: string | null
+          provider: string | null
+          resource_type: string
+          section: string | null
+          sort_order: number
+          start_ref: string | null
+          url: string | null
+          version_id: string
+        }
+        Insert: {
+          course_name?: string | null
+          end_ref?: string | null
+          estimated_cost?: number | null
+          id?: string
+          is_active?: boolean
+          is_paid?: boolean
+          name: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          section?: string | null
+          sort_order?: number
+          start_ref?: string | null
+          url?: string | null
+          version_id: string
+        }
+        Update: {
+          course_name?: string | null
+          end_ref?: string | null
+          estimated_cost?: number | null
+          id?: string
+          is_active?: boolean
+          is_paid?: boolean
+          name?: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          section?: string | null
+          sort_order?: number
+          start_ref?: string | null
+          url?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_resources_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_roadmap_items: {
+        Row: {
+          activity: string | null
+          day_number: number | null
+          description: string | null
+          expected_output: string | null
+          id: string
+          is_active: boolean
+          learning_minutes: number | null
+          module_id: string
+          notes: string | null
+          objective: string | null
+          practice_minutes: number | null
+          resource_refs: string | null
+          sort_order: number
+          title: string
+          topic: string | null
+          version_id: string
+        }
+        Insert: {
+          activity?: string | null
+          day_number?: number | null
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          is_active?: boolean
+          learning_minutes?: number | null
+          module_id: string
+          notes?: string | null
+          objective?: string | null
+          practice_minutes?: number | null
+          resource_refs?: string | null
+          sort_order?: number
+          title: string
+          topic?: string | null
+          version_id: string
+        }
+        Update: {
+          activity?: string | null
+          day_number?: number | null
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          is_active?: boolean
+          learning_minutes?: number | null
+          module_id?: string
+          notes?: string | null
+          objective?: string | null
+          practice_minutes?: number | null
+          resource_refs?: string | null
+          sort_order?: number
+          title?: string
+          topic?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_roadmap_items_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "track_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_roadmap_items_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_weekly_review_items: {
+        Row: {
+          id: string
+          is_active: boolean
+          item: string
+          sort_order: number
+          version_id: string
+          weekly_review_id: string
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean
+          item: string
+          sort_order?: number
+          version_id: string
+          weekly_review_id: string
+        }
+        Update: {
+          id?: string
+          is_active?: boolean
+          item?: string
+          sort_order?: number
+          version_id?: string
+          weekly_review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_weekly_review_items_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "track_weekly_review_items_weekly_review_id_fkey"
+            columns: ["weekly_review_id"]
+            isOneToOne: false
+            referencedRelation: "track_weekly_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_weekly_reviews: {
+        Row: {
+          expected_progress: string | null
+          guidance: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          version_id: string
+          week_number: number | null
+        }
+        Insert: {
+          expected_progress?: string | null
+          guidance?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          version_id: string
+          week_number?: number | null
+        }
+        Update: {
+          expected_progress?: string | null
+          guidance?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          version_id?: string
+          week_number?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_weekly_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1579,6 +2361,17 @@ export type Database = {
       has_permission: { Args: { _key: string; _uid: string }; Returns: boolean }
       is_active_user: { Args: { _uid: string }; Returns: boolean }
       record_login: { Args: never; Returns: undefined }
+      track_copy_version: {
+        Args: {
+          _actor: string
+          _from: string
+          _src: string
+          _summary: string
+          _track: string
+          _version: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       user_status: "ACTIVE" | "INACTIVE" | "SUSPENDED"
