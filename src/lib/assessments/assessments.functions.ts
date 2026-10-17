@@ -89,7 +89,7 @@ export const saveAssessment = createServerFn({ method: "POST" })
       _id: data.id,
       _header: data.header as Json,
       _children: data.children as unknown as Json,
-      _internal: data.internal ?? undefined,
+      ...(data.internal !== null ? { _internal: data.internal } : {}),
     });
     fail(error, "Could not save the assessment");
     return { ok: true };

@@ -77,7 +77,7 @@ export function DocumentLink({ path, name }: { path: string; name: string }) {
           .from("assessment-documents")
           .createSignedUrl(path, 60);
         setBusy(false);
-        if (error || !data) return toast.error("Could not open this document");
+        if (error || !data) { toast.error("Could not open this document"); return; }
         window.open(data.signedUrl, "_blank", "noopener");
       }}
     >

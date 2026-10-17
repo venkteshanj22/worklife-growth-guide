@@ -52,7 +52,9 @@ import { Choice } from "@/features/candidates/Fields";
 import { assessmentQuery } from "./queries";
 import { AssessmentSummary, DocumentLink, ScoreBars, StatusPill } from "./AssessmentSummary";
 
-type Row = Record<string, string>;
+type RowKey = "item"|"skill"|"level"|"remarks"|"current_level"|"required_level"|"priority"|"kind"|"career_path"|"target_role"|"technology_direction"|"rationale"|"path"|"reason"|"area"|"recommendation"|"estimated_focus";
+type Row = Partial<Record<RowKey, string>>;
+type Header = Partial<Record<string, string>> & { overall_outcome?: string; gap_impact?: string };
 const SECTIONS = [
   "Candidate Snapshot",
   "Assessment Scores",
@@ -96,7 +98,7 @@ function init(a: AssessmentDetail) {
       gap_notes: s(a.gap_notes),
       gap_mitigation: s(a.gap_mitigation),
       assessor_summary: s(a.assessor_summary),
-    } as Row,
+    } as Header,
     relocation: a.open_to_relocation,
     scores: a.assessment_dimension_scores.map((d) => ({
       dimension_key: d.dimension_key,
@@ -268,7 +270,7 @@ export function AssessmentEditor({ candidateId, id }: { candidateId: string; id:
   const job = cand.employment.find((e) => e.currently_working) ?? cand.employment[cand.employment.length - 1];
   const total = totalScore(f.scores);
 
-  const listRows = (k: ListKey, fields: { key: string; title: string; options?: readonly string[]; wide?: boolean }[], blank: Row, addLabel: string) => (
+  const listRows = (k: ListKey, fields: { key: RowKey; title: string; options?: readonly string[]; wide?: boolean }[], blank: Row, addLabel: string) => (
     <div className="space-y-3">
       {f[k].map((r, i) => (
         <div key={i} className="flex flex-wrap items-end gap-3 rounded-md border p-3">
@@ -307,7 +309,7 @@ export function AssessmentEditor({ candidateId, id }: { candidateId: string; id:
       )}
     </F>
   );
-  const recField = (i: number, k: string, title: string, area = false) => {
+  const recField = (i: number, k: RowKey, title: string, area = false) => {
     const v = f.recommendations[i]?.[k] ?? "";
     const set = (val: string) =>
       update((x) => ({ ...x, recommendations: x.recommendations.map((r, n) => (n === i ? { ...r, [k]: val } : r)) }));
@@ -649,17 +651,18 @@ function Documents({
   const [type, setType] = useState(DOCUMENT_TYPES[0]!);
   const [remarks, setRemarks] = useState("");
   const [busy, setBusy] = useState(false);
-  const upload = async () => {
-    if (!file) return toast.error("Choose a file");
+  const upload = async (): Promise<void> => {
+    if (!file) { toast.error("Choose a file"); return; }
     const err = fileError(file.name, file.size);
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     setBusy(true);
     const safe = file.name.replace(/[^\w.-]+/g, "_");
     const path = `${candidateId}/${a.id}/${crypto.randomUUID()}-${safe}`;
     const { error } = await supabase.storage.from("assessment-documents").upload(path, file, { contentType: file.type });
     if (error) {
       setBusy(false);
-      return toast.error("Upload failed");
+      toast.error("Upload failed");
+      return;
     }
     try {
       await onAdd({ data: { id: a.id, name: name || file.name, type, path, file: file.name, mime: file.type, size: file.size, remarks } });
