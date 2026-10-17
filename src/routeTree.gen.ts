@@ -28,10 +28,15 @@ import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppUsersRouteImport } from './routes/_authenticated/app.users'
 import { Route as AuthenticatedPortalIndexRouteImport } from './routes/_authenticated/portal.index'
 import { Route as AuthenticatedPortalSectionRouteImport } from './routes/_authenticated/portal.$section'
+import { Route as AuthenticatedPortalPcbRouteImport } from './routes/_authenticated/portal.pcb'
 import { Route as AuthenticatedAppCandidatesIndexRouteImport } from './routes/_authenticated/app.candidates.index'
 import { Route as AuthenticatedAppCandidatesIdRouteImport } from './routes/_authenticated/app.candidates.$id'
 import { Route as AuthenticatedAppCandidatesActiveRouteImport } from './routes/_authenticated/app.candidates.active'
 import { Route as AuthenticatedAppCandidatesNewRouteImport } from './routes/_authenticated/app.candidates.new'
+import { Route as AuthenticatedAppPcbIndexRouteImport } from './routes/_authenticated/app.pcb.index'
+import { Route as AuthenticatedAppPcbVersionIdRouteImport } from './routes/_authenticated/app.pcb.$versionId'
+import { Route as AuthenticatedAppPcbLibraryRouteImport } from './routes/_authenticated/app.pcb.library'
+import { Route as AuthenticatedAppPcbNewRouteImport } from './routes/_authenticated/app.pcb.new'
 import { Route as AuthenticatedAppSoonSectionRouteImport } from './routes/_authenticated/app.soon.$section'
 import { Route as AuthenticatedAppTracksIndexRouteImport } from './routes/_authenticated/app.tracks.index'
 import { Route as AuthenticatedAppTracksIdRouteImport } from './routes/_authenticated/app.tracks.$id'
@@ -138,6 +143,11 @@ const AuthenticatedPortalSectionRoute =
     path: '/$section',
     getParentRoute: () => AuthenticatedPortalRoute,
   } as any)
+const AuthenticatedPortalPcbRoute = AuthenticatedPortalPcbRouteImport.update({
+  id: '/pcb',
+  path: '/pcb',
+  getParentRoute: () => AuthenticatedPortalRoute,
+} as any)
 const AuthenticatedAppCandidatesIndexRoute =
   AuthenticatedAppCandidatesIndexRouteImport.update({
     id: '/',
@@ -162,6 +172,29 @@ const AuthenticatedAppCandidatesNewRoute =
     path: '/new',
     getParentRoute: () => AuthenticatedAppCandidatesRoute,
   } as any)
+const AuthenticatedAppPcbIndexRoute =
+  AuthenticatedAppPcbIndexRouteImport.update({
+    id: '/pcb/',
+    path: '/pcb/',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppPcbVersionIdRoute =
+  AuthenticatedAppPcbVersionIdRouteImport.update({
+    id: '/pcb/$versionId',
+    path: '/pcb/$versionId',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppPcbLibraryRoute =
+  AuthenticatedAppPcbLibraryRouteImport.update({
+    id: '/pcb/library',
+    path: '/pcb/library',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppPcbNewRoute = AuthenticatedAppPcbNewRouteImport.update({
+  id: '/pcb/new',
+  path: '/pcb/new',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppSoonSectionRoute =
   AuthenticatedAppSoonSectionRouteImport.update({
     id: '/soon/$section',
@@ -210,14 +243,19 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/portal/$section': typeof AuthenticatedPortalSectionRoute
+  '/portal/pcb': typeof AuthenticatedPortalPcbRoute
   '/app/': typeof AuthenticatedAppIndexRoute
   '/portal/': typeof AuthenticatedPortalIndexRoute
   '/app/candidates/$id': typeof AuthenticatedAppCandidatesIdRoute
   '/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
+  '/app/pcb/$versionId': typeof AuthenticatedAppPcbVersionIdRoute
+  '/app/pcb/library': typeof AuthenticatedAppPcbLibraryRoute
+  '/app/pcb/new': typeof AuthenticatedAppPcbNewRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
+  '/app/pcb/': typeof AuthenticatedAppPcbIndexRoute
   '/app/tracks/': typeof AuthenticatedAppTracksIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
@@ -236,14 +274,19 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/portal/$section': typeof AuthenticatedPortalSectionRoute
+  '/portal/pcb': typeof AuthenticatedPortalPcbRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/portal': typeof AuthenticatedPortalIndexRoute
   '/app/candidates/$id': typeof AuthenticatedAppCandidatesIdRoute
   '/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
+  '/app/pcb/$versionId': typeof AuthenticatedAppPcbVersionIdRoute
+  '/app/pcb/library': typeof AuthenticatedAppPcbLibraryRoute
+  '/app/pcb/new': typeof AuthenticatedAppPcbNewRoute
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/app/candidates': typeof AuthenticatedAppCandidatesIndexRoute
+  '/app/pcb': typeof AuthenticatedAppPcbIndexRoute
   '/app/tracks': typeof AuthenticatedAppTracksIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
@@ -267,14 +310,19 @@ export interface FileRoutesById {
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
   '/_authenticated/portal/$section': typeof AuthenticatedPortalSectionRoute
+  '/_authenticated/portal/pcb': typeof AuthenticatedPortalPcbRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_authenticated/portal/': typeof AuthenticatedPortalIndexRoute
   '/_authenticated/app/candidates/$id': typeof AuthenticatedAppCandidatesIdRoute
   '/_authenticated/app/candidates/active': typeof AuthenticatedAppCandidatesActiveRoute
   '/_authenticated/app/candidates/new': typeof AuthenticatedAppCandidatesNewRoute
+  '/_authenticated/app/pcb/$versionId': typeof AuthenticatedAppPcbVersionIdRoute
+  '/_authenticated/app/pcb/library': typeof AuthenticatedAppPcbLibraryRoute
+  '/_authenticated/app/pcb/new': typeof AuthenticatedAppPcbNewRoute
   '/_authenticated/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/_authenticated/app/tracks/$id': typeof AuthenticatedAppTracksIdRoute
   '/_authenticated/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
+  '/_authenticated/app/pcb/': typeof AuthenticatedAppPcbIndexRoute
   '/_authenticated/app/tracks/': typeof AuthenticatedAppTracksIndexRoute
   '/_authenticated/app/candidates/$id_/edit': typeof AuthenticatedAppCandidatesIdEditRoute
   '/_authenticated/app/candidates/$id_/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
@@ -298,14 +346,19 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/users'
     | '/portal/$section'
+    | '/portal/pcb'
     | '/app/'
     | '/portal/'
     | '/app/candidates/$id'
     | '/app/candidates/active'
     | '/app/candidates/new'
+    | '/app/pcb/$versionId'
+    | '/app/pcb/library'
+    | '/app/pcb/new'
     | '/app/soon/$section'
     | '/app/tracks/$id'
     | '/app/candidates/'
+    | '/app/pcb/'
     | '/app/tracks/'
     | '/app/candidates/$id/edit'
     | '/app/candidates/$id/assessments/$aid'
@@ -324,14 +377,19 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/users'
     | '/portal/$section'
+    | '/portal/pcb'
     | '/app'
     | '/portal'
     | '/app/candidates/$id'
     | '/app/candidates/active'
     | '/app/candidates/new'
+    | '/app/pcb/$versionId'
+    | '/app/pcb/library'
+    | '/app/pcb/new'
     | '/app/soon/$section'
     | '/app/tracks/$id'
     | '/app/candidates'
+    | '/app/pcb'
     | '/app/tracks'
     | '/app/candidates/$id/edit'
     | '/app/candidates/$id/assessments/$aid'
@@ -354,14 +412,19 @@ export interface FileRouteTypes {
     | '/_authenticated/app/settings'
     | '/_authenticated/app/users'
     | '/_authenticated/portal/$section'
+    | '/_authenticated/portal/pcb'
     | '/_authenticated/app/'
     | '/_authenticated/portal/'
     | '/_authenticated/app/candidates/$id'
     | '/_authenticated/app/candidates/active'
     | '/_authenticated/app/candidates/new'
+    | '/_authenticated/app/pcb/$versionId'
+    | '/_authenticated/app/pcb/library'
+    | '/_authenticated/app/pcb/new'
     | '/_authenticated/app/soon/$section'
     | '/_authenticated/app/tracks/$id'
     | '/_authenticated/app/candidates/'
+    | '/_authenticated/app/pcb/'
     | '/_authenticated/app/tracks/'
     | '/_authenticated/app/candidates/$id_/edit'
     | '/_authenticated/app/candidates/$id_/assessments/$aid'
@@ -512,6 +575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPortalSectionRouteImport
       parentRoute: typeof AuthenticatedPortalRoute
     }
+    '/_authenticated/portal/pcb': {
+      id: '/_authenticated/portal/pcb'
+      path: '/pcb'
+      fullPath: '/portal/pcb'
+      preLoaderRoute: typeof AuthenticatedPortalPcbRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
+    }
     '/_authenticated/app/candidates/': {
       id: '/_authenticated/app/candidates/'
       path: '/'
@@ -539,6 +609,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/candidates/new'
       preLoaderRoute: typeof AuthenticatedAppCandidatesNewRouteImport
       parentRoute: typeof AuthenticatedAppCandidatesRoute
+    }
+    '/_authenticated/app/pcb/': {
+      id: '/_authenticated/app/pcb/'
+      path: '/pcb'
+      fullPath: '/app/pcb/'
+      preLoaderRoute: typeof AuthenticatedAppPcbIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/pcb/$versionId': {
+      id: '/_authenticated/app/pcb/$versionId'
+      path: '/pcb/$versionId'
+      fullPath: '/app/pcb/$versionId'
+      preLoaderRoute: typeof AuthenticatedAppPcbVersionIdRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/pcb/library': {
+      id: '/_authenticated/app/pcb/library'
+      path: '/pcb/library'
+      fullPath: '/app/pcb/library'
+      preLoaderRoute: typeof AuthenticatedAppPcbLibraryRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/pcb/new': {
+      id: '/_authenticated/app/pcb/new'
+      path: '/pcb/new'
+      fullPath: '/app/pcb/new'
+      preLoaderRoute: typeof AuthenticatedAppPcbNewRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/soon/$section': {
       id: '/_authenticated/app/soon/$section'
@@ -614,8 +712,12 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
+  AuthenticatedAppPcbVersionIdRoute: typeof AuthenticatedAppPcbVersionIdRoute
+  AuthenticatedAppPcbLibraryRoute: typeof AuthenticatedAppPcbLibraryRoute
+  AuthenticatedAppPcbNewRoute: typeof AuthenticatedAppPcbNewRoute
   AuthenticatedAppSoonSectionRoute: typeof AuthenticatedAppSoonSectionRoute
   AuthenticatedAppTracksIdRoute: typeof AuthenticatedAppTracksIdRoute
+  AuthenticatedAppPcbIndexRoute: typeof AuthenticatedAppPcbIndexRoute
   AuthenticatedAppTracksIndexRoute: typeof AuthenticatedAppTracksIndexRoute
 }
 
@@ -628,8 +730,12 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
+  AuthenticatedAppPcbVersionIdRoute: AuthenticatedAppPcbVersionIdRoute,
+  AuthenticatedAppPcbLibraryRoute: AuthenticatedAppPcbLibraryRoute,
+  AuthenticatedAppPcbNewRoute: AuthenticatedAppPcbNewRoute,
   AuthenticatedAppSoonSectionRoute: AuthenticatedAppSoonSectionRoute,
   AuthenticatedAppTracksIdRoute: AuthenticatedAppTracksIdRoute,
+  AuthenticatedAppPcbIndexRoute: AuthenticatedAppPcbIndexRoute,
   AuthenticatedAppTracksIndexRoute: AuthenticatedAppTracksIndexRoute,
 }
 
@@ -638,11 +744,13 @@ const AuthenticatedAppRouteWithChildren =
 
 interface AuthenticatedPortalRouteChildren {
   AuthenticatedPortalSectionRoute: typeof AuthenticatedPortalSectionRoute
+  AuthenticatedPortalPcbRoute: typeof AuthenticatedPortalPcbRoute
   AuthenticatedPortalIndexRoute: typeof AuthenticatedPortalIndexRoute
 }
 
 const AuthenticatedPortalRouteChildren: AuthenticatedPortalRouteChildren = {
   AuthenticatedPortalSectionRoute: AuthenticatedPortalSectionRoute,
+  AuthenticatedPortalPcbRoute: AuthenticatedPortalPcbRoute,
   AuthenticatedPortalIndexRoute: AuthenticatedPortalIndexRoute,
 }
 
