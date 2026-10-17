@@ -141,10 +141,10 @@ type ListKey = "strengths" | "development_areas" | "technical_skills" | "skill_g
 
 function F({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="space-y-1.5">
-      <Label>{title}</Label>
+    <label className="block space-y-1.5">
+      <span className="text-sm font-medium leading-none">{title}</span>
       {children}
-    </div>
+    </label>
   );
 }
 
