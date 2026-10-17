@@ -86,7 +86,7 @@ export async function buildPcbPdf({ version: v, pcbCode, candidate: c, draft }: 
   text(v.primary_target_role ? `Target role: ${v.primary_target_role}` : "", { size: 12, color: MUTED, gap: 30 });
   kv([["Candidate ID", c.candidate_code], ["PCB ID", id], ["PCB Version", `V${v.version}`], ["Career path", v.primary_career_path], ["Duration", `${v.target_duration_days} days`], ["Date", fmtDate(v.approved_at ?? new Date().toISOString())], ["Status", draft ? "DRAFT - not approved" : "Approved"]]);
 
-  const snap = (v.assessment_snapshot ?? {}) as Record<string, unknown> & { strengths?: string[]; development_areas?: string[]; primary?: Record<string, string | null>; alternative?: Record<string, string | null> };
+  const snap = (v.assessment_snapshot ?? {}) as { assessment_id?: string; assessment_date?: string; overall_score?: number; outcome?: string; summary?: string; strengths?: string[]; development_areas?: string[]; primary?: Record<string, string | null>; alternative?: Record<string, string | null> };
   const byPhase = (pid: string) => v.pcb_modules.filter((m) => m.phase_id === pid);
   const items = (mid: string) => v.pcb_day_items.filter((i) => i.module_id === mid);
 
