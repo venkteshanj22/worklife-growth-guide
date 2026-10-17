@@ -8,7 +8,7 @@ import { PERMISSIONS } from "./permissions";
 export interface NavLeaf {
   label: string;
   /** Functional route, or undefined for a Coming Soon placeholder. */
-  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active";
+  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active" | "/app/tracks" | "/app/pcb-content";
   soon?: string;
   permission: string;
 }
@@ -31,7 +31,11 @@ export const STAFF_NAV: NavGroup[] = [
   },
   {
     label: "PCB Studio", icon: Compass, permission: PERMISSIONS.pcbView,
-    children: ["Master Tracks", "PCB Builder", "PCB Library"].map((l) => ({ label: l, soon: `pcb-${s(l)}`, permission: PERMISSIONS.pcbView })),
+    children: [
+      { label: "Master Tracks", to: "/app/tracks", permission: PERMISSIONS.tracksView },
+      { label: "Global PCB Content", to: "/app/pcb-content", permission: PERMISSIONS.globalContentView },
+      ...["PCB Builder", "PCB Library"].map((l) => ({ label: l, soon: `pcb-${s(l)}`, permission: PERMISSIONS.pcbView })),
+    ],
   },
   {
     label: "Delivery", icon: Truck, permission: PERMISSIONS.deliveryView,

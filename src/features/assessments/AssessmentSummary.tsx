@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatDate } from "@/components/app/shared";
 import { alabel, maxTotal } from "@/lib/assessments/model";
 import type { AssessmentDetail } from "@/lib/assessments/assessments.functions";
+import { TrackMapping } from "@/features/tracks/TrackMapping";
 
 export function StatusPill({ status }: { status: string }) {
   const tone =
@@ -123,6 +124,7 @@ export function AssessmentSummary({ a }: { a: AssessmentDetail }) {
       <p className="text-xs text-muted-foreground">
         Outcome refers to career-path readiness. It is not a job or employment guarantee.
       </p>
+      <TrackMapping recs={a.assessment_recommendations} assessmentId={a.id} />
       <Section title="Dimension Score Breakdown">
         <ScoreBars scores={a.assessment_dimension_scores} />
       </Section>
