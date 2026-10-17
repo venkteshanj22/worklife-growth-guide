@@ -14,7 +14,7 @@ export type FieldDef = {
   required?: boolean;
   wide?: boolean;
 };
-export type Row = Record<string, unknown>;
+export type Row = { id?: unknown; code?: unknown; name?: unknown; title?: unknown; version?: unknown; summary?: unknown; content_type?: unknown; content?: unknown; status?: unknown; [k: string]: unknown };
 
 export function FieldInput({ f, value, onChange, disabled }: { f: FieldDef; value: unknown; onChange: (v: unknown) => void; disabled?: boolean }) {
   const id = `f-${f.key}`;

@@ -199,9 +199,9 @@ export const upsertTrackRow = createServerFn({ method: "POST" })
       const { data: p } = await admin.from(parentTable as "track_phases").select("id").eq("id", String(pid)).eq("version_id", v.id).maybeSingle();
       if (!p) throw new Error("Parent item not found in this version.");
     }
-    if (row.id) {
-      const id = String(row.id);
-      delete row.id;
+    if (row["id"]) {
+      const id = String(row["id"]);
+      delete row["id"];
       const { error } = await tbl.update(row as never).eq("id", id).eq("version_id", v.id);
       if (error) throw new Error(error.message.length < 200 ? error.message : "Could not save");
     } else {
@@ -239,9 +239,9 @@ export const duplicateTrackRow = createServerFn({ method: "POST" })
     const { data: src } = await admin.from(data.table as "track_outcomes").select("*").eq("id", data.id).eq("version_id", v.id).maybeSingle();
     if (!src) throw new Error("Item not found.");
     const { id: _id, ...rest } = src as Record<string, unknown>;
-    const copy = { ...rest, sort_order: Number(rest.sort_order ?? 0) + 0.5 };
+    const copy = { ...rest, sort_order: Number(rest["sort_order"] ?? 0) + 0.5 };
     for (const k of ["title", "name"]) if (typeof copy[k as keyof typeof copy] === "string") (copy as Record<string, unknown>)[k] = `${copy[k as keyof typeof copy]} (copy)`;
-    const { data: created, error } = await admin.from(data.table as "track_outcomes").insert({ ...copy, sort_order: Number(rest.sort_order ?? 0) + 1 } as never).select("id").single();
+    const { data: created, error } = await admin.from(data.table as "track_outcomes").insert({ ...copy, sort_order: Number(rest["sort_order"] ?? 0) + 1 } as never).select("id").single();
     if (error) throw new Error("Could not duplicate");
     // Copy direct children for phases (modules + their items) and weekly reviews.
     if (data.table === "track_phases") {

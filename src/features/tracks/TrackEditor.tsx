@@ -43,7 +43,7 @@ const PREREQS: FieldDef[] = [
 ];
 const HEADER_KEYS = [...OVERVIEW, ...PREREQS].map((f) => f.key).filter((k) => k !== "code");
 
-function HeaderForm({ d, fields, editable, note }: { d: TrackDetail; fields: FieldDef[]; editable: boolean; note?: string }) {
+function HeaderForm({ d, fields, editable, note }: { d: TrackDetail; fields: FieldDef[]; editable: boolean; note?: string | undefined }) {
   const qc = useQueryClient();
   const init = { ...d.version, code: d.track.code } as Row;
   const [row, setRow] = useState<Row>(init);
@@ -164,7 +164,7 @@ function Resources({ v, editable }: { v: V; editable: boolean }) {
   );
 }
 
-export function TrackEditor({ id, v: versionId }: { id: string; v?: string }) {
+export function TrackEditor({ id, v: versionId }: { id: string; v?: string | undefined }) {
   const { data: d } = useSuspenseQuery(trackQuery(id, versionId));
   const { user } = useCurrentUser();
   const nav = useNavigate();
