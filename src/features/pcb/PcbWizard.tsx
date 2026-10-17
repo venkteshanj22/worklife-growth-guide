@@ -21,7 +21,7 @@ import { JourneyOffer } from "./JourneyOffer";
 const STEPS = ["Candidate", "Assessment", "Base Master Track", "Additional Content", "PCB Setup", "Create Draft"];
 const lbl = (s?: string | null) => (s ? s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()) : "");
 
-export function PcbWizard({ initialCandidate }: { initialCandidate?: string }) {
+export function PcbWizard({ initialCandidate }: { initialCandidate?: string | undefined }) {
   const { user } = useCurrentUser();
   const navigate = useNavigate();
   const [step, setStep] = useState(initialCandidate ? 1 : 0);

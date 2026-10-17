@@ -13,13 +13,13 @@ export const selCount = (s: Sel) => Object.values(s).reduce((n, l) => n + l.leng
 /** Browse a Master Track version and tick items to copy. */
 export function TrackPicker({ content, sel, setSel }: { content: TrackContent; sel: Sel; setSel: (s: Sel) => void }) {
   const toggle = (k: keyof Sel, id: string) => setSel({ ...sel, [k]: sel[k].includes(id) ? sel[k].filter((x) => x !== id) : [...sel[k], id] });
-  const Box = ({ k, id, label, sub, indent = 0 }: { k: keyof Sel; id: string; label: string; sub?: string; indent?: number }) => (
+  const Box = ({ k, id, label, sub, indent = 0 }: { k: keyof Sel; id: string; label: string; sub?: string | undefined; indent?: number }) => (
     <label className="flex cursor-pointer items-start gap-2 py-1 text-sm" style={{ paddingLeft: indent * 18 }}>
       <Checkbox checked={sel[k].includes(id)} onCheckedChange={() => toggle(k, id)} className="mt-0.5" />
       <span>{label}{sub && <span className="ml-1.5 text-xs text-muted-foreground">{sub}</span>}</span>
     </label>
   );
-  const group = (title: string, k: keyof Sel, rows: { id: string; label: string; sub?: string }[]) =>
+  const group = (title: string, k: keyof Sel, rows: { id: string; label: string; sub?: string | undefined }[]) =>
     rows.length ? (
       <div>
         <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</p>

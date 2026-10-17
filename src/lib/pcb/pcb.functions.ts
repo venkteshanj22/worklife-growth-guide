@@ -498,7 +498,7 @@ async function storeApprovedPdf(admin: Admin, actor: Actor, versionId: string) {
   const full = await loadFull(admin, versionId);
   const candidate = await candidateSnapshot(admin, meta.pcb.candidate_id);
   const bytes = await buildPcbPdf({ version: full, pcbCode: meta.pcb.pcb_code, candidate, draft: false });
-  const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes as Uint8Array<ArrayBuffer>))).map((b) => b.toString(16).padStart(2, "0")).join("");
   const name = `${pcbDisplayId(meta.pcb.pcb_code, full.version)}.pdf`;
   const path = `${meta.pcb.candidate_id}/${versionId}/${Date.now()}-${name}`;
   const { error } = await admin.storage.from("pcb-documents").upload(path, bytes, { contentType: "application/pdf", upsert: false });
