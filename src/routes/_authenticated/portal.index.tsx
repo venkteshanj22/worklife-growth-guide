@@ -39,6 +39,15 @@ function PortalHome() {
           ))}
         </dl>
       )}
+      {candidate?.assessment_completed && (
+        <Panel className="p-5">
+          <p className="text-xs text-muted-foreground">Career Assessment</p>
+          <p className="mt-1 text-sm font-medium">Status: Completed</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Your Personal Career Blueprint is being prepared.
+          </p>
+        </Panel>
+      )}
       <Panel className="p-6 sm:p-8">
         <div className="mb-4 grid size-11 place-items-center rounded-full bg-accent text-accent-foreground">
           <Sparkles className="size-5" />

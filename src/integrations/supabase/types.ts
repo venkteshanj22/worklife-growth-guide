@@ -41,6 +41,396 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_development_areas: {
+        Row: {
+          assessment_id: string
+          id: string
+          item: string
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          id?: string
+          item: string
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          id?: string
+          item?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_development_areas_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_development_plan: {
+        Row: {
+          area: string
+          assessment_id: string
+          estimated_focus: string | null
+          id: string
+          priority: string
+          recommendation: string | null
+          sort_order: number
+        }
+        Insert: {
+          area: string
+          assessment_id: string
+          estimated_focus?: string | null
+          id?: string
+          priority?: string
+          recommendation?: string | null
+          sort_order?: number
+        }
+        Update: {
+          area?: string
+          assessment_id?: string
+          estimated_focus?: string | null
+          id?: string
+          priority?: string
+          recommendation?: string | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_development_plan_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_dimension_scores: {
+        Row: {
+          assessment_id: string
+          dimension_key: string
+          id: string
+          label: string
+          max_score: number
+          rating: string | null
+          remarks: string | null
+          score: number | null
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          dimension_key: string
+          id?: string
+          label: string
+          max_score: number
+          rating?: string | null
+          remarks?: string | null
+          score?: number | null
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          dimension_key?: string
+          id?: string
+          label?: string
+          max_score?: number
+          rating?: string | null
+          remarks?: string | null
+          score?: number | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_dimension_scores_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_dimension_scores_dimension_key_fkey"
+            columns: ["dimension_key"]
+            isOneToOne: false
+            referencedRelation: "assessment_dimensions"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      assessment_dimensions: {
+        Row: {
+          is_active: boolean
+          key: string
+          label: string
+          max_score: number
+          sort_order: number
+        }
+        Insert: {
+          is_active?: boolean
+          key: string
+          label: string
+          max_score: number
+          sort_order?: number
+        }
+        Update: {
+          is_active?: boolean
+          key?: string
+          label?: string
+          max_score?: number
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      assessment_documents: {
+        Row: {
+          assessment_id: string
+          candidate_id: string
+          document_name: string
+          document_type: string | null
+          file_name: string
+          id: string
+          mime_type: string | null
+          remarks: string | null
+          size_bytes: number | null
+          storage_path: string
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          assessment_id: string
+          candidate_id: string
+          document_name: string
+          document_type?: string | null
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          remarks?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          assessment_id?: string
+          candidate_id?: string
+          document_name?: string
+          document_type?: string | null
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          remarks?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_documents_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_documents_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_not_recommended_paths: {
+        Row: {
+          assessment_id: string
+          id: string
+          master_track_id: string | null
+          path: string
+          reason: string | null
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          id?: string
+          master_track_id?: string | null
+          path: string
+          reason?: string | null
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          id?: string
+          master_track_id?: string | null
+          path?: string
+          reason?: string | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_not_recommended_paths_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_recommendations: {
+        Row: {
+          assessment_id: string
+          career_path: string | null
+          id: string
+          kind: string
+          master_track_id: string | null
+          rationale: string | null
+          target_role: string | null
+          technology_direction: string | null
+        }
+        Insert: {
+          assessment_id: string
+          career_path?: string | null
+          id?: string
+          kind: string
+          master_track_id?: string | null
+          rationale?: string | null
+          target_role?: string | null
+          technology_direction?: string | null
+        }
+        Update: {
+          assessment_id?: string
+          career_path?: string | null
+          id?: string
+          kind?: string
+          master_track_id?: string | null
+          rationale?: string | null
+          target_role?: string | null
+          technology_direction?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_recommendations_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_skill_gaps: {
+        Row: {
+          assessment_id: string
+          current_level: string | null
+          id: string
+          priority: string
+          remarks: string | null
+          required_level: string | null
+          skill: string
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          current_level?: string | null
+          id?: string
+          priority?: string
+          remarks?: string | null
+          required_level?: string | null
+          skill: string
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          current_level?: string | null
+          id?: string
+          priority?: string
+          remarks?: string | null
+          required_level?: string | null
+          skill?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_skill_gaps_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_strengths: {
+        Row: {
+          assessment_id: string
+          id: string
+          item: string
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          id?: string
+          item: string
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          id?: string
+          item?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_strengths_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_technical_skills: {
+        Row: {
+          assessment_id: string
+          id: string
+          level: string
+          remarks: string | null
+          skill: string
+          sort_order: number
+        }
+        Insert: {
+          assessment_id: string
+          id?: string
+          level: string
+          remarks?: string | null
+          skill: string
+          sort_order?: number
+        }
+        Update: {
+          assessment_id?: string
+          id?: string
+          level?: string
+          remarks?: string | null
+          skill?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_technical_skills_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -121,6 +511,177 @@ export type Database = {
             columns: ["candidate_id"]
             isOneToOne: false
             referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_assessment_internal: {
+        Row: {
+          assessment_id: string
+          internal_notes: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          assessment_id: string
+          internal_notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          assessment_id?: string
+          internal_notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_assessment_internal_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: true
+            referencedRelation: "candidate_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_assessment_internal_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_assessments: {
+        Row: {
+          assessed_by: string | null
+          assessment_code: string
+          assessment_date: string
+          assessment_type: string
+          assessor_summary: string | null
+          candidate_id: string
+          career_objective: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          expected_ctc: string | null
+          finalized_at: string | null
+          finalized_by: string | null
+          gap_impact: string | null
+          gap_mitigation: string | null
+          gap_notes: string | null
+          id: string
+          learning_days_per_week: number | null
+          learning_hours_per_day: number | null
+          open_to_relocation: boolean
+          overall_outcome: string | null
+          overall_score: number | null
+          preferred_career: string | null
+          preferred_location: string | null
+          preferred_technology: string | null
+          preferred_work_mode: string | null
+          sequence: number
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          assessed_by?: string | null
+          assessment_code: string
+          assessment_date?: string
+          assessment_type: string
+          assessor_summary?: string | null
+          candidate_id: string
+          career_objective?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          expected_ctc?: string | null
+          finalized_at?: string | null
+          finalized_by?: string | null
+          gap_impact?: string | null
+          gap_mitigation?: string | null
+          gap_notes?: string | null
+          id?: string
+          learning_days_per_week?: number | null
+          learning_hours_per_day?: number | null
+          open_to_relocation?: boolean
+          overall_outcome?: string | null
+          overall_score?: number | null
+          preferred_career?: string | null
+          preferred_location?: string | null
+          preferred_technology?: string | null
+          preferred_work_mode?: string | null
+          sequence: number
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          assessed_by?: string | null
+          assessment_code?: string
+          assessment_date?: string
+          assessment_type?: string
+          assessor_summary?: string | null
+          candidate_id?: string
+          career_objective?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          expected_ctc?: string | null
+          finalized_at?: string | null
+          finalized_by?: string | null
+          gap_impact?: string | null
+          gap_mitigation?: string | null
+          gap_notes?: string | null
+          id?: string
+          learning_days_per_week?: number | null
+          learning_hours_per_day?: number | null
+          open_to_relocation?: boolean
+          overall_outcome?: string | null
+          overall_score?: number | null
+          preferred_career?: string | null
+          preferred_location?: string | null
+          preferred_technology?: string | null
+          preferred_work_mode?: string | null
+          sequence?: number
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_assessments_assessed_by_fkey"
+            columns: ["assessed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_assessments_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_assessments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_assessments_finalized_by_fkey"
+            columns: ["finalized_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_assessments_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -936,7 +1497,47 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assessment_add_document: {
+        Args: {
+          _file: string
+          _id: string
+          _mime: string
+          _name: string
+          _path: string
+          _remarks: string
+          _size: number
+          _type: string
+        }
+        Returns: string
+      }
+      assessment_assert: {
+        Args: { _cid: string; _perm: string }
+        Returns: undefined
+      }
+      assessment_create: { Args: { _cid: string }; Returns: string }
+      assessment_log: {
+        Args: { _aid: string; _cid: string; _event: string }
+        Returns: undefined
+      }
+      assessment_save: {
+        Args: {
+          _children: Json
+          _header: Json
+          _id: string
+          _internal?: string
+        }
+        Returns: undefined
+      }
+      assessment_set_status: {
+        Args: { _id: string; _status: string }
+        Returns: undefined
+      }
+      can_read_assessment: { Args: { _aid: string }; Returns: boolean }
       can_read_candidate: { Args: { _id: string }; Returns: boolean }
+      can_read_candidate_assessments: {
+        Args: { _cid: string }
+        Returns: boolean
+      }
       candidate_assert: {
         Args: { _id: string; _permission: string }
         Returns: undefined
