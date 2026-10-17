@@ -1,3 +1,4 @@
+import { candidateHead } from "@/lib/candidates/head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -12,7 +13,7 @@ import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export const Route = createFileRoute("/_authenticated/app/audit")({
   beforeLoad: requirePermission(PERMISSIONS.auditView),
-  head: () => ({ meta: [{ title: "Audit Log — CareerOS" }] }),
+  head: () => candidateHead("Audit Log", "Read-only administrative and candidate audit history in CareerOS."),
   component: AuditPage,
 });
 

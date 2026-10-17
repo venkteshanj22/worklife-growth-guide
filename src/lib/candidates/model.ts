@@ -1,0 +1,309 @@
+import { z } from "zod";
+export const STATUSES = [
+  "DRAFT",
+  "ENROLLED",
+  "ASSESSMENT_COMPLETED",
+  "PCB_PREPARATION",
+  "PCB_APPROVED",
+  "ROADMAP_ACTIVE",
+  "OPPORTUNITY_READY",
+  "OPPORTUNITY_PHASE",
+  "SELECTED",
+  "COMPLETED",
+  "ON_HOLD",
+  "DISCONTINUED",
+  "CANCELLED",
+] as const;
+export const ACTIVE_STATUSES = [
+  "ENROLLED",
+  "ASSESSMENT_COMPLETED",
+  "PCB_PREPARATION",
+  "PCB_APPROVED",
+  "ROADMAP_ACTIVE",
+  "OPPORTUNITY_READY",
+  "OPPORTUNITY_PHASE",
+  "SELECTED",
+  "ON_HOLD",
+];
+export const label = (s: string) =>
+  s
+    .toLowerCase()
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+export type FieldSpec = {
+  key: string;
+  title: string;
+  type?: "date" | "number" | "boolean" | "textarea" | "photo" | undefined;
+  options?: string[] | undefined;
+  required?: boolean | undefined;
+};
+const field = (
+  key: string,
+  title: string,
+  type?: FieldSpec["type"],
+  options?: string[],
+  required?: boolean,
+): FieldSpec => ({ key, title, type, options, required });
+export const personalFields = [
+  field("full_name", "Full name", undefined, undefined, true),
+  field("primary_mobile", "Primary mobile", undefined, undefined, true),
+  field("personal_email", "Personal email", undefined, undefined, true),
+  field("date_of_birth", "Date of birth", "date"),
+  field("gender", "Gender", undefined, [
+    "FEMALE",
+    "MALE",
+    "NON_BINARY",
+    "PREFER_NOT_TO_SAY",
+    "OTHER",
+  ]),
+  field("alternate_mobile", "Alternate mobile"),
+  field("alternate_email", "Alternate email"),
+  field("address_line_1", "Address line 1"),
+  field("address_line_2", "Address line 2"),
+  field("city", "City"),
+  field("state", "State"),
+  field("pin_code", "PIN code"),
+  field("country", "Country"),
+  field("profile_photo", "Profile photo", "photo"),
+];
+export const educationFields = [
+  field("qualification_level", "Qualification level"),
+  field("degree", "Degree / qualification"),
+  field("specialization", "Specialization"),
+  field("institution", "Institution / college"),
+  field("university", "University / board"),
+  field("start_year", "Start year", "number"),
+  field("completion_year", "Completion year", "number"),
+  field("score", "Percentage / CGPA"),
+  field("education_type", "Education type", undefined, [
+    "FULL_TIME",
+    "PART_TIME",
+    "DISTANCE",
+    "ONLINE",
+  ]),
+  field("status", "Status", undefined, ["COMPLETED", "PURSUING", "DISCONTINUED"]),
+];
+export const employmentFields = [
+  field("company_name", "Company name"),
+  field("designation", "Designation"),
+  field("employment_type", "Employment type", undefined, [
+    "FULL_TIME",
+    "PART_TIME",
+    "CONTRACT",
+    "INTERNSHIP",
+    "FREELANCE",
+  ]),
+  field("industry", "Industry"),
+  field("location", "Location"),
+  field("start_date", "Start date", "date"),
+  field("end_date", "End date", "date"),
+  field("currently_working", "Currently working here", "boolean"),
+  field("ctc", "Last / current CTC"),
+  field("role_description", "Role description", "textarea"),
+  field("technologies", "Technologies / skills used"),
+  field("reason_for_leaving", "Reason for leaving"),
+  field("remarks", "Remarks", "textarea"),
+];
+export const employmentStatusField = field("employment_status", "Employment status", undefined, [
+  "FRESHER",
+  "EMPLOYED",
+  "UNEMPLOYED",
+  "SELF_EMPLOYED",
+  "CAREER_BREAK",
+]);
+export const gapFields = [
+  field("has_career_gap", "Has career gap", "boolean"),
+  field("gap_start_date", "Gap start date", "date"),
+  field("gap_end_date", "Gap end date", "date"),
+  field("currently_in_gap", "Currently in career gap", "boolean"),
+  field("gap_duration", "Approximate duration"),
+  field("gap_reason", "Gap reason", undefined, [
+    "HIGHER_EDUCATION",
+    "FAMILY",
+    "HEALTH",
+    "COMPETITIVE_EXAMS",
+    "BUSINESS",
+    "PERSONAL",
+    "JOB_SEARCH",
+    "CAREER_TRANSITION",
+    "OTHER",
+  ]),
+  field("gap_explanation", "Candidate explanation", "textarea"),
+  field("gap_internal_remarks", "Internal remarks", "textarea"),
+];
+export const careerFields = [
+  field("current_career_situation", "Current career situation", "textarea"),
+  field("existing_skills", "Existing skills", "textarea"),
+  field("tools_known", "Tools / technologies known"),
+  field("total_experience", "Total experience (years)", "number"),
+  field("relevant_it_experience", "Relevant IT experience (years)", "number"),
+  field("last_designation", "Current / last designation"),
+  field("last_industry", "Current / last industry"),
+  field("last_ctc", "Current / last CTC"),
+  field("expected_ctc", "Expected CTC"),
+  field("preferred_locations", "Preferred job locations"),
+  field("open_to_relocation", "Open to relocation", "boolean"),
+  field("preferred_work_mode", "Preferred work mode", undefined, [
+    "ONSITE",
+    "HYBRID",
+    "REMOTE",
+    "ANY",
+  ]),
+  field("candidate_preferred_role", "Candidate preferred role"),
+];
+export const programFields = [
+  field("enrollment_date", "Enrollment date", "date"),
+  field("program_plan", "Program plan"),
+  field("program_status", "Program status"),
+  field("roadmap_duration", "Roadmap duration (days)", "number"),
+  field("tentative_start_date", "Tentative roadmap start date", "date"),
+  field("tentative_end_date", "Tentative roadmap end date", "date"),
+  field("source_reference", "Source reference"),
+  field("internal_remarks", "Internal remarks", "textarea"),
+];
+export const ASSIGNMENT_TYPES = [
+  "career_consultant",
+  "technical_reviewer",
+  "placement_executive",
+] as const;
+export const defaults = {
+  full_name: "",
+  primary_mobile: "",
+  personal_email: "",
+  country: "India",
+  employment_status: "FRESHER",
+  journey_status: "DRAFT",
+  roadmap_duration: 60,
+  has_career_gap: false,
+  currently_in_gap: false,
+  open_to_relocation: false,
+};
+export type FormRecord = Record<string, string | number | boolean | null>;
+const allFields = [
+  ...personalFields,
+  employmentStatusField,
+  ...gapFields,
+  ...careerFields,
+  ...programFields,
+];
+const optionalText = z.string().trim().max(10000).nullable().optional();
+const validators: Record<string, z.ZodTypeAny> = {};
+for (const f of allFields)
+  validators[f.key] =
+    f.type === "boolean"
+      ? z.boolean().optional()
+      : f.type === "number"
+        ? z.number().min(0).max(10000).nullable().optional()
+        : f.type === "date"
+          ? z
+              .string()
+              .regex(/^\d{4}-\d{2}-\d{2}$/, "Enter a valid date")
+              .nullable()
+              .optional()
+          : f.options
+            ? z
+                .enum(f.options as [string, ...string[]])
+                .nullable()
+                .optional()
+            : optionalText;
+validators["full_name"] = z.string().trim().min(1, "Full name is required").max(120);
+validators["primary_mobile"] = z
+  .string()
+  .trim()
+  .regex(/^\+?[\d ()-]{7,20}$/, "Enter a valid primary mobile")
+  .refine((v) => v["replace"](/\D/g, "").length >= 7, "Enter a valid mobile");
+validators["personal_email"] = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email("Enter a valid personal email")
+  .max(255);
+validators["alternate_email"] = z
+  .union([z.string().trim().email("Enter a valid alternate email"), z.literal(""), z.null()])
+  .optional();
+validators["alternate_mobile"] = z
+  .union([
+    z
+      .string()
+      .trim()
+      .regex(/^\+?[\d ()-]{7,20}$/, "Enter a valid alternate mobile"),
+    z.literal(""),
+    z.null(),
+  ])
+  .optional();
+validators["profile_photo"] = z
+  .string()
+  .max(1400000)
+  .regex(/^data:image\/(jpeg|png|webp);base64,/, "Choose a valid photo")
+  .nullable()
+  .optional();
+validators["roadmap_duration"] = z
+  .number()
+  .int()
+  .min(1, "Duration must be at least one day")
+  .max(3650);
+validators["journey_status"] = z.enum(STATUSES);
+export const recordSchema = z.object(validators).superRefine((v, ctx) => {
+  if (v["journey_status"] === "ENROLLED") {
+    if (!v["enrollment_date"])
+      ctx.addIssue({
+        code: "custom",
+        path: ["enrollment_date"],
+        message: "Enrollment date is required for Enrolled",
+      });
+    if (!v["program_plan"])
+      ctx.addIssue({
+        code: "custom",
+        path: ["program_plan"],
+        message: "Program plan is required for Enrolled",
+      });
+  }
+  for (const [a, b] of [
+    ["tentative_start_date", "tentative_end_date"],
+    ["gap_start_date", "gap_end_date"],
+  ] as const)
+    if (v[a] && v[b] && v[b] < v[a])
+      ctx.addIssue({ code: "custom", path: [b], message: "End date must be after start date" });
+});
+function childSchema(fields: FieldSpec[]) {
+  const shape: Record<string, z.ZodTypeAny> = { id: z.string().uuid().optional() };
+  for (const f of fields)
+    shape[f.key] =
+      f.type === "boolean"
+        ? z.boolean().optional()
+        : f.type === "number"
+          ? z.number().int().min(1900).max(2200).nullable().optional()
+          : f.type === "date"
+            ? z
+                .string()
+                .regex(/^\d{4}-\d{2}-\d{2}$/)
+                .nullable()
+                .optional()
+            : f.options
+              ? z
+                  .enum(f.options as [string, ...string[]])
+                  .nullable()
+                  .optional()
+              : optionalText;
+  return z.object(shape).superRefine((v, ctx) => {
+    const start = v["start_date"] ?? v["start_year"],
+      end = v["end_date"] ?? v["completion_year"];
+    if (start && end && !v["currently_working"] && end < start)
+      ctx.addIssue({ code: "custom", message: "End must be after start" });
+  });
+}
+export const saveSchema = z.object({
+  id: z.string().uuid().nullable(),
+  record: recordSchema,
+  education: z.array(childSchema(educationFields)).max(50),
+  employment: z.array(childSchema(employmentFields)).max(50),
+  assignments: z.record(z.enum(ASSIGNMENT_TYPES), z.string().uuid().or(z.literal(""))).default({}),
+});
+export function cleanFields(value: FormRecord, fields: FieldSpec[]) {
+  return Object.fromEntries(
+    [...fields.map((f) => f.key), "id"]
+      .filter((k) => k in value)
+      .map((k) => [k, value[k] === "" ? null : value[k]]),
+  );
+}

@@ -1,3 +1,4 @@
+import { candidateHead } from "@/lib/candidates/head";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { can } from "@/lib/rbac/permissions";
 import { ComingSoon, PageHeader } from "@/components/app/shared";
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/app/soon/$section")({
     const perm = SOON_PERMISSIONS[params.section];
     if (!perm || !can(context.user, perm)) throw redirect({ to: "/access-denied" });
   },
-  head: () => ({ meta: [{ title: "Coming soon — CareerOS" }] }),
+  head: ({ params }) => candidateHead(`${SOON_LABELS[params.section] ?? "Staff Module"} — Coming Soon`, "This CareerOS staff module will be activated in a future phase."),
   component: SoonPage,
 });
 
@@ -17,7 +18,7 @@ function SoonPage() {
   const label = SOON_LABELS[section] ?? "Module";
   return (
     <>
-      <PageHeader crumbs={["CareerOS", ...label.split(" · ")]} title={label.split(" · ").at(-1)!} />
+      <PageHeader crumbs={["CareerOS", ...label.split(" · ")]} title={label.split(" · ").at(-1) ?? "Module"} />
       <ComingSoon title={label} homeTo="/app/dashboard" />
     </>
   );

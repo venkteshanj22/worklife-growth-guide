@@ -14,6 +14,8 @@ import { getSetupStatus } from "@/lib/admin/setup.functions";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Sign in — CareerOS" },
       { name: "description", content: "Sign in to CareerOS by Coding361." },
       { property: "og:title", content: "Sign in — CareerOS" },

@@ -4,6 +4,8 @@ import { ShieldAlert } from "lucide-react";
 export const Route = createFileRoute("/access-denied")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Access denied — CareerOS" },
       { name: "description", content: "You don't have permission to view this page." },
       { property: "og:title", content: "Access denied — CareerOS" },

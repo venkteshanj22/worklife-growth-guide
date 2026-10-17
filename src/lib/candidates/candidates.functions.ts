@@ -1,0 +1,321 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getRequest } from "@tanstack/react-start/server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requirePermission, getAdmin } from "@/lib/admin/authz.server";
+import { ACTIVE_STATUSES, STATUSES, ASSIGNMENT_TYPES, saveSchema } from "./model";
+import type { Json } from "@/integrations/supabase/types";
+export type CandidateOptions = {
+  plans: { key: string; name: string }[];
+  staff: { id: string; full_name: string; role_key: string }[];
+  portal_users: { id: string; full_name: string; email: string }[];
+};
+export const listSchema = z.object({
+  search: z.string().max(100).default(""),
+  status: z.string().default(""),
+  plan: z.string().default(""),
+  employment: z.string().default(""),
+  consultant: z.string().default(""),
+  portal: z.string().default(""),
+  from: z.string().default(""),
+  until: z.string().default(""),
+  active: z.boolean().default(false),
+  page: z.number().int().min(1).default(1),
+  pageSize: z.number().int().min(5).max(50).default(10),
+  sort: z
+    .enum(["created_at", "full_name", "candidate_code", "enrollment_date"])
+    .default("created_at"),
+  ascending: z.boolean().default(false),
+});
+export type CandidateFilters = z.infer<typeof listSchema>;
+export const listCandidates = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => listSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.view");
+    let q = context.supabase
+      .from("candidates")
+      .select(
+        "id,candidate_code,full_name,primary_mobile,personal_email,employment_status,program_plan,journey_status,enrollment_date,portal_status,candidate_assignments(assignment_type,user_id)",
+        { count: "exact" },
+      )
+      .order(data.sort, { ascending: data.ascending })
+      .order("id");
+    const term = data.search.replace(/[^\p{L}\p{N}@ .+_-]/gu, "").trim();
+    if (term)
+      q = q.or(
+        `candidate_code.ilike.%${term}%,full_name.ilike.%${term}%,primary_mobile.ilike.%${term}%,personal_email.ilike.%${term}%`,
+      );
+    if (data.active) q = q.in("journey_status", ACTIVE_STATUSES);
+    if (data.status) q = q.eq("journey_status", data.status);
+    if (data.plan) q = q.eq("program_plan", data.plan);
+    if (data.employment) q = q.eq("employment_status", data.employment);
+    if (data.portal) q = q.eq("portal_status", data.portal);
+    if (data.from) q = q.gte("enrollment_date", data.from);
+    if (data.until) q = q.lte("enrollment_date", data.until);
+    if (data.consultant) {
+      const { data: a, error } = await context.supabase
+        .from("candidate_assignments")
+        .select("candidate_id")
+        .eq("assignment_type", "career_consultant")
+        .eq("user_id", z.string().uuid().parse(data.consultant));
+      if (error) throw new Error("Could not filter assignments");
+      const ids = (a ?? []).map((v) => v.candidate_id);
+      if (!ids.length) return { rows: [], total: 0 };
+      q = q.in("id", ids);
+    }
+    const {
+      data: rows,
+      count,
+      error,
+    } = await q.range((data.page - 1) * data.pageSize, data.page * data.pageSize - 1);
+    if (error) throw new Error("Could not load candidates");
+    return { rows: rows ?? [], total: count ?? 0 };
+  });
+export const getCandidateOptions = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.view");
+    const { data, error } = await context.supabase.rpc("candidate_options");
+    if (error || !data) throw new Error("Could not load candidate choices");
+    return data as unknown as CandidateOptions;
+  });
+export const getCandidate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.view");
+    const s = context.supabase;
+    const { data: c, error } = await s
+      .from("candidates")
+      .select("*")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error || !c) throw new Error("Candidate not found or access denied.");
+    const [
+      education,
+      employment,
+      assignments,
+      activity,
+      status_history,
+      assignment_history,
+      portal,
+    ] = await Promise.all([
+      s.from("candidate_education").select("*").eq("candidate_id", data.id).order("start_year"),
+      s.from("candidate_employment").select("*").eq("candidate_id", data.id).order("start_date"),
+      s.from("candidate_assignments").select("*").eq("candidate_id", data.id),
+      s
+        .from("candidate_activity")
+        .select("*")
+        .eq("candidate_id", data.id)
+        .order("created_at", { ascending: false })
+        .limit(200),
+      s
+        .from("candidate_status_history")
+        .select("*")
+        .eq("candidate_id", data.id)
+        .order("changed_at", { ascending: false }),
+      s
+        .from("candidate_assignment_history")
+        .select("*")
+        .eq("candidate_id", data.id)
+        .order("changed_at", { ascending: false }),
+      s.from("candidate_portal_links").select("*").eq("candidate_id", data.id).maybeSingle(),
+    ]);
+    if (
+      [
+        education,
+        employment,
+        assignments,
+        activity,
+        status_history,
+        assignment_history,
+        portal,
+      ].some((v) => v.error)
+    )
+      throw new Error("Could not load the complete candidate record");
+    return {
+      candidate: c,
+      education: education.data ?? [],
+      employment: employment.data ?? [],
+      assignments: assignments.data ?? [],
+      activity: activity.data ?? [],
+      status_history: status_history.data ?? [],
+      assignment_history: assignment_history.data ?? [],
+      portal: portal.data,
+    };
+  });
+export type CandidateDetail = Awaited<ReturnType<typeof getCandidate>>;
+export const saveCandidate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => saveSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await requirePermission(
+      context.supabase,
+      context.userId,
+      data.id ? "candidates.edit" : "candidates.create",
+    );
+    const { data: id, error } = await context.supabase.rpc("candidate_save", {
+      _id: data.id as unknown as string,
+      _record: data.record as Json,
+      _education: data.education as Json,
+      _employment: data.employment as Json,
+      _assignments: data.assignments,
+    });
+    if (error)
+      throw new Error(
+        error.message.includes("permission") || error.message.includes("access")
+          ? "You do not have permission for this candidate."
+          : error.message,
+      );
+    return { id };
+  });
+export const changeCandidateStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({ id: z.string().uuid(), status: z.enum(STATUSES), remarks: z.string().max(2000) })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.status");
+    const { error } = await context.supabase.rpc("candidate_change_status", {
+      _id: data.id,
+      _status: data.status,
+      _remarks: data.remarks,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+export const assignCandidateStaff = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        type: z.enum(ASSIGNMENT_TYPES),
+        user: z.string().uuid().nullable(),
+        remarks: z.string().max(2000),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.assign");
+    const { error } = await context.supabase.rpc("candidate_set_assignment", {
+      _id: data.id,
+      _type: data.type,
+      _user: data.user as unknown as string,
+      _remarks: data.remarks,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+export const candidatePortalAction = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        user: z.string().uuid().nullable(),
+        disable: z.boolean(),
+        invite: z.boolean().default(false),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requirePermission(context.supabase, context.userId, "candidates.portal");
+    const { data: c } = await context.supabase
+      .from("candidates")
+      .select("id,full_name,personal_email,primary_mobile,candidate_code")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!c) throw new Error("Candidate not found or access denied.");
+    let user = data.user;
+    let created: string | null = null;
+    if (data.invite) {
+      if (data.disable) throw new Error("Invalid portal action");
+      const { data: link } = await context.supabase
+        .from("candidate_portal_links")
+        .select("id")
+        .eq("candidate_id", data.id)
+        .maybeSingle();
+      if (link)
+        throw new Error("A portal account is already linked. Reactivate the existing account.");
+      if (
+        /\.(test|invalid|example|localhost)$/i.test(c.personal_email) ||
+        /@example\./i.test(c.personal_email)
+      )
+        throw new Error("A real email address is required for an invitation.");
+      const admin = await getAdmin();
+      const { data: role } = await admin
+        .from("roles")
+        .select("id")
+        .eq("key", "candidate")
+        .eq("is_active", true)
+        .single();
+      if (!role) throw new Error("Candidate role is not active.");
+      const { data: invited, error } = await admin.auth.admin.inviteUserByEmail(c.personal_email, {
+        redirectTo: `${new URL(getRequest().url).origin}/reset-password`,
+        data: { full_name: c.full_name },
+      });
+      if (error || !invited.user)
+        throw new Error("Invitation could not be sent. The candidate record has been preserved.");
+      created = invited.user.id;
+      user = created;
+      const p = await admin
+        .from("profiles")
+        .insert({
+          id: created,
+          full_name: c.full_name,
+          email: c.personal_email,
+          mobile: c.primary_mobile,
+          user_code: `PORTAL-${c.candidate_code}`,
+          created_by: context.userId,
+        });
+      const r = p.error
+        ? { error: p.error }
+        : await admin
+            .from("user_roles")
+            .insert({ user_id: created, role_id: role.id, created_by: context.userId });
+      if (r.error) {
+        await admin.auth.admin.deleteUser(created);
+        throw new Error("Could not prepare the portal account. Candidate record preserved.");
+      }
+    }
+    const { error } = await context.supabase.rpc("candidate_set_portal", {
+      _id: data.id,
+      _user: user as unknown as string,
+      _disable: data.disable,
+    });
+    if (error) {
+      if (created) {
+        const admin = await getAdmin();
+        await admin.auth.admin.deleteUser(created);
+      }
+      throw new Error("Portal change could not be completed. The candidate record is unchanged.");
+    }
+    return { ok: true };
+  });
+export const activeCandidateCount = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requirePermission(context.supabase, context.userId, "dashboard.view");
+    const { count, error } = await context.supabase
+      .from("candidates")
+      .select("id", { count: "exact", head: true })
+      .in("journey_status", ACTIVE_STATUSES);
+    if (error) throw new Error("Could not load active candidate count");
+    return count ?? 0;
+  });
+export const myCandidateSummary = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.rpc("candidate_portal_summary");
+    if (error) throw new Error("Could not load your candidate summary");
+    return data as {
+      full_name: string;
+      candidate_code: string;
+      program_plan: string | null;
+      journey_status: string;
+    } | null;
+  });

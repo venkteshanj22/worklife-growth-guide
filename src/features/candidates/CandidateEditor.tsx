@@ -1,0 +1,369 @@
+import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Plus, Trash2, ArrowLeft, ArrowRight, Save } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/app/shared";
+import { useCurrentUser } from "@/lib/auth/use-current-user";
+import { can } from "@/lib/rbac/permissions";
+import { saveCandidate, type CandidateDetail } from "@/lib/candidates/candidates.functions";
+import {
+  defaults,
+  personalFields,
+  educationFields,
+  employmentFields,
+  employmentStatusField,
+  gapFields,
+  careerFields,
+  programFields,
+  ASSIGNMENT_TYPES,
+  cleanFields,
+  saveSchema,
+  label,
+  type FormRecord,
+  type FieldSpec,
+} from "@/lib/candidates/model";
+import { Fields, Choice, Badge } from "./Fields";
+import { optionsQuery } from "./queries";
+const STEPS = [
+  "Personal",
+  "Education",
+  "Employment",
+  "Career profile",
+  "Program",
+  "Staff assignment",
+  "Review",
+];
+export function CandidateEditor({ detail }: { detail?: CandidateDetail }) {
+  const { data: options } = useSuspenseQuery(optionsQuery);
+  const { user } = useCurrentUser();
+  const nav = useNavigate();
+  const qc = useQueryClient();
+  const save = useServerFn(saveCandidate);
+  const [step, setStep] = useState(0);
+  const [record, setRecord] = useState<FormRecord>(detail ? { ...detail.candidate } : defaults);
+  const [education, setEducation] = useState<FormRecord[]>(
+    detail?.education.map((e) => ({ ...e })) ?? [],
+  );
+  const [employment, setEmployment] = useState<FormRecord[]>(
+    detail?.employment.map((e) => ({ ...e })) ?? [],
+  );
+  const [assignments, setAssignments] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const set = (key: string, v: string | number | boolean | null) =>
+    setRecord((r) => ({
+      ...r,
+      [key]: v,
+      ...(key === "currently_in_gap" && v ? { gap_end_date: null } : {}),
+    }));
+  async function submit(draft = false) {
+    const fields = [
+      ...personalFields,
+      employmentStatusField,
+      ...gapFields,
+      ...careerFields,
+      ...programFields,
+    ];
+    const r = {
+      ...cleanFields(record, fields),
+      journey_status: draft && !detail ? "DRAFT" : record["journey_status"],
+    };
+    const parsed = saveSchema.safeParse({
+      id: detail?.candidate.id ?? null,
+      record: r,
+      education: education.map((e) => cleanFields(e, educationFields)),
+      employment: employment.map((e) => cleanFields(e, employmentFields)),
+      assignments,
+    });
+    if (!parsed.success) {
+      const errs: Record<string, string> = {};
+      for (const issue of parsed.error.issues)
+        errs[String(issue.path[1] ?? issue.path[0])] = issue.message;
+      setErrors(errs);
+      toast.error(parsed.error.issues[0]?.message ?? "Please check your information");
+      const path = parsed.error.issues[0]?.path;
+      if (path?.[0] === "education") setStep(1);
+      else if (path?.[0] === "employment") setStep(2);
+      else if (
+        path?.[1] === "program_plan" ||
+        path?.[1] === "enrollment_date" ||
+        path?.[1] === "roadmap_duration"
+      )
+        setStep(4);
+      else setStep(0);
+      return;
+    }
+    setSaving(true);
+    setErrors({});
+    try {
+      const result = await save({ data: parsed.data });
+      await qc.invalidateQueries({ queryKey: ["candidates"] });
+      await qc.invalidateQueries({ queryKey: ["candidate", result.id] });
+      await qc.invalidateQueries({ queryKey: ["candidate-count"] });
+      toast.success(detail ? "Candidate updated" : "Candidate created");
+      await nav({ to: "/app/candidates/$id", params: { id: result.id } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save candidate");
+    } finally {
+      setSaving(false);
+    }
+  }
+  return (
+    <>
+      <PageHeader
+        crumbs={["Candidates", detail?.candidate.candidate_code ?? "Add Candidate"]}
+        title={detail ? "Edit Candidate" : "Add Candidate"}
+        actions={
+          <Button variant="outline" asChild>
+            <Link to="/app/candidates">
+              <ArrowLeft />
+              Candidates
+            </Link>
+          </Button>
+        }
+      />
+      <div
+        className="mb-7 flex gap-2 overflow-x-auto border-b pb-4"
+        aria-label="Candidate form steps"
+      >
+        {STEPS.map((s, i) => (
+          <Button
+            key={s}
+            variant={step === i ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setStep(i)}
+          >
+            <span className="text-xs">{i + 1}.</span>
+            {s}
+          </Button>
+        ))}
+      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void submit();
+        }}
+        noValidate
+      >
+        <div className="min-h-80">
+          <h2 className="mb-5 text-lg font-semibold">{STEPS[step]}</h2>
+          {step === 0 && (
+            <Fields fields={personalFields} value={record} onChange={set} errors={errors} />
+          )}
+          {step === 1 && (
+            <Repeater
+              title="Education"
+              fields={educationFields}
+              rows={education}
+              setRows={setEducation}
+            />
+          )}
+          {step === 2 && (
+            <>
+              <Fields fields={[employmentStatusField]} value={record} onChange={set} />
+              <div className="mt-6">
+                <Repeater
+                  title="Employment"
+                  fields={employmentFields}
+                  rows={employment}
+                  setRows={setEmployment}
+                />
+              </div>
+              <h3 className="mb-4 mt-8 border-t pt-6 font-semibold">Career Gap</h3>
+              <Fields fields={gapFields} value={record} onChange={set} />
+            </>
+          )}
+          {step === 3 && (
+            <Fields fields={careerFields} value={record} onChange={set} errors={errors} />
+          )}
+          {step === 4 && (
+            <>
+              <div className="mb-4 grid gap-4 sm:grid-cols-3">
+                <Choice
+                  title="Program plan"
+                  value={String(record["program_plan"] ?? "")}
+                  onChange={(v) => set("program_plan", v)}
+                  items={options.plans.map((p) => ({ value: p.key, label: p.name }))}
+                />
+                {!detail ? (
+                  <Choice
+                    title="Journey status"
+                    value={String(record["journey_status"])}
+                    onChange={(v) => set("journey_status", v)}
+                    empty="Draft"
+                    items={["DRAFT", "ENROLLED"].map((v) => ({ value: v, label: label(v) }))}
+                  />
+                ) : (
+                  <div className="space-y-2">
+                    <p className="text-sm">Journey status</p>
+                    <Badge value={String(record["journey_status"])} />
+                  </div>
+                )}
+              </div>
+              {errors["program_plan"] && (
+                <p className="mb-3 text-sm text-destructive">{errors["program_plan"]}</p>
+              )}
+              <Fields
+                fields={programFields.filter((f) => f.key !== "program_plan")}
+                value={record}
+                onChange={set}
+                errors={errors}
+              />
+            </>
+          )}
+          {step === 5 &&
+            (detail ? (
+              <p className="text-sm text-muted-foreground">
+                Assignments are managed separately on the candidate page to preserve change history.
+              </p>
+            ) : can(user, "candidates.assign") ? (
+              <div className="grid gap-4 sm:grid-cols-3">
+                {ASSIGNMENT_TYPES.map((t) => (
+                  <Choice
+                    key={t}
+                    title={label(t)}
+                    value={assignments[t] ?? ""}
+                    onChange={(v) => setAssignments((a) => ({ ...a, [t]: v }))}
+                    items={options.staff
+                      .filter((s) => s.role_key === t)
+                      .map((s) => ({ value: s.id, label: s.full_name }))}
+                    empty="Unassigned"
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No staff assignment permission.</p>
+            ))}
+          {step === 6 && (
+            <div className="space-y-5">
+              <dl className="grid gap-4 sm:grid-cols-3">
+                {[
+                  ["Full name", record["full_name"]],
+                  ["Primary mobile", record["primary_mobile"]],
+                  ["Personal email", record["personal_email"]],
+                  ["Country", record["country"]],
+                  ["Program plan", record["program_plan"]],
+                  ["Enrollment date", record["enrollment_date"]],
+                  ["Roadmap duration", `${record["roadmap_duration"]} days`],
+                  ["Education records", education.length],
+                  ["Employment records", employment.length],
+                ].map(([k, v]) => (
+                  <div key={String(k)}>
+                    <dt className="text-xs text-muted-foreground">{k}</dt>
+                    <dd className="mt-1 break-words text-sm font-medium">{v || "—"}</dd>
+                  </div>
+                ))}
+              </dl>
+              <Badge value={String(record["journey_status"])} />
+              <p className="text-sm text-muted-foreground">
+                Portal access: {detail ? label(detail.candidate.portal_status) : "Not activated"}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="mt-8 flex flex-wrap justify-between gap-3 border-t pt-5">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={step === 0 || saving}
+            onClick={() => setStep((s) => s - 1)}
+          >
+            <ArrowLeft />
+            Previous
+          </Button>
+          <div className="flex flex-wrap gap-2">
+            {!detail && (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={saving}
+                onClick={() => void submit(true)}
+              >
+                Save as Draft
+              </Button>
+            )}
+            {step < 6 ? (
+              <Button type="button" onClick={() => setStep((s) => s + 1)}>
+                Next
+                <ArrowRight />
+              </Button>
+            ) : (
+              <Button type="submit" disabled={saving}>
+                <Save />
+                {saving ? "Saving…" : detail ? "Save changes" : "Create Candidate"}
+              </Button>
+            )}
+          </div>
+        </div>
+      </form>
+    </>
+  );
+}
+function Repeater({
+  title,
+  fields,
+  rows,
+  setRows,
+}: {
+  title: string;
+  fields: FieldSpec[];
+  rows: FormRecord[];
+  setRows: (rows: FormRecord[]) => void;
+}) {
+  return (
+    <div className="space-y-5">
+      {rows.length === 0 && (
+        <p className="py-6 text-sm text-muted-foreground">No information added yet.</p>
+      )}
+      {rows.map((r, i) => (
+        <section key={i} className="rounded-lg border bg-card p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="font-medium">
+              {title} {i + 1}
+            </h3>
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              aria-label={`Remove ${title.toLowerCase()} ${i + 1}`}
+              title="Remove record"
+              onClick={() => setRows(rows.filter((_, n) => n !== i))}
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          </div>
+          <Fields
+            fields={fields}
+            value={r}
+            onChange={(key, v) =>
+              setRows(
+                rows.map((old, n) =>
+                  n === i
+                    ? {
+                        ...old,
+                        [key]: v,
+                        ...(key === "currently_working" && v ? { end_date: null } : {}),
+                      }
+                    : old,
+                ),
+              )
+            }
+          />
+        </section>
+      ))}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() =>
+          setRows([...rows, title === "Employment" ? { currently_working: false } : {}])
+        }
+      >
+        <Plus />
+        Add {title}
+      </Button>
+    </div>
+  );
+}

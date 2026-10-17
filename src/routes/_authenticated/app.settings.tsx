@@ -1,3 +1,4 @@
+import { candidateHead } from "@/lib/candidates/head";
 import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +17,7 @@ import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export const Route = createFileRoute("/_authenticated/app/settings")({
   beforeLoad: requirePermission(PERMISSIONS.settingsView),
-  head: () => ({ meta: [{ title: "Settings — CareerOS" }] }),
+  head: () => candidateHead("Settings", "Organization and application settings for CareerOS."),
   component: SettingsPage,
 });
 

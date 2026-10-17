@@ -8,6 +8,20 @@
       "when": 1791654474972,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792257584134,
+      "tag": "0001_candidate_master_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792257635056,
+      "tag": "0002_candidate_master_operations",
+      "breakpoints": true
     }
   ]
 }
