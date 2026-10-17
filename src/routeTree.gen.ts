@@ -33,6 +33,7 @@ import { Route as AuthenticatedAppCandidatesActiveRouteImport } from './routes/_
 import { Route as AuthenticatedAppCandidatesNewRouteImport } from './routes/_authenticated/app.candidates.new'
 import { Route as AuthenticatedAppSoonSectionRouteImport } from './routes/_authenticated/app.soon.$section'
 import { Route as AuthenticatedAppCandidatesIdEditRouteImport } from './routes/_authenticated/app.candidates.$id_.edit'
+import { Route as AuthenticatedAppCandidatesIdAssessmentsAidRouteImport } from './routes/_authenticated/app.candidates.$id_.assessments.$aid'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -164,6 +165,12 @@ const AuthenticatedAppCandidatesIdEditRoute =
     path: '/$id/edit',
     getParentRoute: () => AuthenticatedAppCandidatesRoute,
   } as any)
+const AuthenticatedAppCandidatesIdAssessmentsAidRoute =
+  AuthenticatedAppCandidatesIdAssessmentsAidRouteImport.update({
+    id: '/$id_/assessments/$aid',
+    path: '/$id/assessments/$aid',
+    getParentRoute: () => AuthenticatedAppCandidatesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
+  '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -211,6 +219,7 @@ export interface FileRoutesByTo {
   '/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/app/candidates': typeof AuthenticatedAppCandidatesIndexRoute
   '/app/candidates/$id/edit': typeof AuthenticatedAppCandidatesIdEditRoute
+  '/app/candidates/$id/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -238,6 +247,7 @@ export interface FileRoutesById {
   '/_authenticated/app/soon/$section': typeof AuthenticatedAppSoonSectionRoute
   '/_authenticated/app/candidates/': typeof AuthenticatedAppCandidatesIndexRoute
   '/_authenticated/app/candidates/$id_/edit': typeof AuthenticatedAppCandidatesIdEditRoute
+  '/_authenticated/app/candidates/$id_/assessments/$aid': typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/app/soon/$section'
     | '/app/candidates/'
     | '/app/candidates/$id/edit'
+    | '/app/candidates/$id/assessments/$aid'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/app/soon/$section'
     | '/app/candidates'
     | '/app/candidates/$id/edit'
+    | '/app/candidates/$id/assessments/$aid'
   id:
     | '__root__'
     | '/'
@@ -313,6 +325,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/soon/$section'
     | '/_authenticated/app/candidates/'
     | '/_authenticated/app/candidates/$id_/edit'
+    | '/_authenticated/app/candidates/$id_/assessments/$aid'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -495,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppCandidatesIdEditRouteImport
       parentRoute: typeof AuthenticatedAppCandidatesRoute
     }
+    '/_authenticated/app/candidates/$id_/assessments/$aid': {
+      id: '/_authenticated/app/candidates/$id_/assessments/$aid'
+      path: '/$id/assessments/$aid'
+      fullPath: '/app/candidates/$id/assessments/$aid'
+      preLoaderRoute: typeof AuthenticatedAppCandidatesIdAssessmentsAidRouteImport
+      parentRoute: typeof AuthenticatedAppCandidatesRoute
+    }
   }
 }
 
@@ -504,6 +524,7 @@ interface AuthenticatedAppCandidatesRouteChildren {
   AuthenticatedAppCandidatesNewRoute: typeof AuthenticatedAppCandidatesNewRoute
   AuthenticatedAppCandidatesIndexRoute: typeof AuthenticatedAppCandidatesIndexRoute
   AuthenticatedAppCandidatesIdEditRoute: typeof AuthenticatedAppCandidatesIdEditRoute
+  AuthenticatedAppCandidatesIdAssessmentsAidRoute: typeof AuthenticatedAppCandidatesIdAssessmentsAidRoute
 }
 
 const AuthenticatedAppCandidatesRouteChildren: AuthenticatedAppCandidatesRouteChildren =
@@ -515,6 +536,8 @@ const AuthenticatedAppCandidatesRouteChildren: AuthenticatedAppCandidatesRouteCh
     AuthenticatedAppCandidatesIndexRoute: AuthenticatedAppCandidatesIndexRoute,
     AuthenticatedAppCandidatesIdEditRoute:
       AuthenticatedAppCandidatesIdEditRoute,
+    AuthenticatedAppCandidatesIdAssessmentsAidRoute:
+      AuthenticatedAppCandidatesIdAssessmentsAidRoute,
   }
 
 const AuthenticatedAppCandidatesRouteWithChildren =
