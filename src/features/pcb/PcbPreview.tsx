@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { formatDate } from "@/components/app/shared";
 import { pcbDisplayId, plannedDays } from "@/lib/pcb/model";
 import type { PcbDetail } from "@/lib/pcb/pcb.functions";
@@ -10,7 +11,7 @@ export function PcbPreview({ d }: { d: PcbDetail }) {
   const snap = (v.assessment_snapshot ?? {}) as { assessment_id?: string; assessment_date?: string; overall_score?: number; outcome?: string; strengths?: string[]; development_areas?: string[]; summary?: string };
   const kv = (pairs: [string, unknown][]) => (
     <dl className="grid gap-x-6 gap-y-1.5 sm:grid-cols-[180px_1fr]">
-      {pairs.filter(([, x]) => x != null && x !== "").map(([k, x]) => <><dt key={`${k}-k`} className="text-xs font-medium text-muted-foreground">{k}</dt><dd key={`${k}-v`} className="text-sm">{String(x)}</dd></>)}
+      {pairs.filter(([, x]) => x != null && x !== "").map(([k, x]) => <Fragment key={k}><dt className="text-xs font-medium text-muted-foreground">{k}</dt><dd className="text-sm">{String(x)}</dd></Fragment>)}
     </dl>
   );
   const data = (code: string) => {
