@@ -977,6 +977,51 @@ export type Database = {
           },
         ]
       }
+      candidate_pcbs: {
+        Row: {
+          candidate_id: string
+          created_at: string
+          created_by: string | null
+          current_approved_version_id: string | null
+          id: string
+          pcb_code: string
+          updated_at: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string
+          created_by?: string | null
+          current_approved_version_id?: string | null
+          id?: string
+          pcb_code: string
+          updated_at?: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_approved_version_id?: string | null
+          id?: string
+          pcb_code?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_pcbs_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: true
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_pcbs_current_fk"
+            columns: ["current_approved_version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidate_portal_links: {
         Row: {
           activated_at: string
@@ -1531,6 +1576,1052 @@ export type Database = {
             columns: ["current_version_id"]
             isOneToOne: false
             referencedRelation: "master_track_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_content_blocks: {
+        Row: {
+          block_type: string
+          code: string | null
+          content: string | null
+          copied_at: string | null
+          id: string
+          is_controlled: boolean
+          is_included: boolean
+          is_locked: boolean
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          title: string
+          version_id: string
+        }
+        Insert: {
+          block_type?: string
+          code?: string | null
+          content?: string | null
+          copied_at?: string | null
+          id?: string
+          is_controlled?: boolean
+          is_included?: boolean
+          is_locked?: boolean
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title: string
+          version_id: string
+        }
+        Update: {
+          block_type?: string
+          code?: string | null
+          content?: string | null
+          copied_at?: string | null
+          id?: string
+          is_controlled?: boolean
+          is_included?: boolean
+          is_locked?: boolean
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_content_blocks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_day_items: {
+        Row: {
+          activity: string | null
+          copied_at: string | null
+          day_number: number | null
+          description: string | null
+          expected_output: string | null
+          id: string
+          learning_minutes: number | null
+          module_id: string
+          notes: string | null
+          objective: string | null
+          practice_minutes: number | null
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          title: string
+          topic: string | null
+          version_id: string
+        }
+        Insert: {
+          activity?: string | null
+          copied_at?: string | null
+          day_number?: number | null
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          learning_minutes?: number | null
+          module_id: string
+          notes?: string | null
+          objective?: string | null
+          practice_minutes?: number | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title: string
+          topic?: string | null
+          version_id: string
+        }
+        Update: {
+          activity?: string | null
+          copied_at?: string | null
+          day_number?: number | null
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          learning_minutes?: number | null
+          module_id?: string
+          notes?: string | null
+          objective?: string | null
+          practice_minutes?: number | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title?: string
+          topic?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_day_items_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_day_items_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_documents: {
+        Row: {
+          checksum: string | null
+          file_name: string
+          generated_at: string
+          generated_by: string | null
+          id: string
+          size_bytes: number | null
+          storage_path: string
+          version_id: string
+        }
+        Insert: {
+          checksum?: string | null
+          file_name: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          size_bytes?: number | null
+          storage_path: string
+          version_id: string
+        }
+        Update: {
+          checksum?: string | null
+          file_name?: string
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          size_bytes?: number | null
+          storage_path?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_documents_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_milestones: {
+        Row: {
+          copied_at: string | null
+          description: string | null
+          evidence: string | null
+          id: string
+          name: string
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          target_day: number | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          target_day?: number | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          target_day?: number | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_milestones_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_modules: {
+        Row: {
+          copied_at: string | null
+          description: string | null
+          id: string
+          name: string
+          objective: string | null
+          phase_id: string
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          suggested_duration: string | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          objective?: string | null
+          phase_id: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          suggested_duration?: string | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          objective?: string | null
+          phase_id?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          suggested_duration?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_modules_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_modules_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_phases: {
+        Row: {
+          copied_at: string | null
+          end_day: number | null
+          id: string
+          name: string
+          objective: string | null
+          phase_number: number | null
+          short_description: string | null
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          start_day: number | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          end_day?: number | null
+          id?: string
+          name: string
+          objective?: string | null
+          phase_number?: number | null
+          short_description?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_day?: number | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          end_day?: number | null
+          id?: string
+          name?: string
+          objective?: string | null
+          phase_number?: number | null
+          short_description?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_day?: number | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_phases_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_projects: {
+        Row: {
+          copied_at: string | null
+          deliverables: string | null
+          description: string | null
+          difficulty: string | null
+          end_day: number | null
+          features: string | null
+          id: string
+          name: string
+          project_type: string
+          scenario: string | null
+          selection_reason: string | null
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          start_day: number | null
+          technologies: string | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          deliverables?: string | null
+          description?: string | null
+          difficulty?: string | null
+          end_day?: number | null
+          features?: string | null
+          id?: string
+          name: string
+          project_type?: string
+          scenario?: string | null
+          selection_reason?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_day?: number | null
+          technologies?: string | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          deliverables?: string | null
+          description?: string | null
+          difficulty?: string | null
+          end_day?: number | null
+          features?: string | null
+          id?: string
+          name?: string
+          project_type?: string
+          scenario?: string | null
+          selection_reason?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_day?: number | null
+          technologies?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_projects_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_resource_mappings: {
+        Row: {
+          day_item_id: string | null
+          id: string
+          module_id: string | null
+          phase_id: string | null
+          resource_id: string
+          sort_order: number
+          version_id: string
+        }
+        Insert: {
+          day_item_id?: string | null
+          id?: string
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id: string
+          sort_order?: number
+          version_id: string
+        }
+        Update: {
+          day_item_id?: string | null
+          id?: string
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id?: string
+          sort_order?: number
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_resource_mappings_day_item_id_fkey"
+            columns: ["day_item_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_day_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_resource_mappings_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_resource_mappings_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_resource_mappings_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_resource_mappings_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_resources: {
+        Row: {
+          copied_at: string | null
+          course_name: string | null
+          end_ref: string | null
+          estimated_cost: number | null
+          id: string
+          is_paid: boolean
+          name: string
+          notes: string | null
+          provider: string | null
+          resource_type: string
+          section: string | null
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          start_ref: string | null
+          url: string | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          course_name?: string | null
+          end_ref?: string | null
+          estimated_cost?: number | null
+          id?: string
+          is_paid?: boolean
+          name: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          section?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_ref?: string | null
+          url?: string | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          course_name?: string | null
+          end_ref?: string | null
+          estimated_cost?: number | null
+          id?: string
+          is_paid?: boolean
+          name?: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          section?: string | null
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          start_ref?: string | null
+          url?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_resources_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_review_notes: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          comment: string
+          created_at: string
+          id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          section: string
+          status: string
+          version_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          comment: string
+          created_at?: string
+          id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section?: string
+          status?: string
+          version_id: string
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          comment?: string
+          created_at?: string
+          id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section?: string
+          status?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_review_notes_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_skill_gaps: {
+        Row: {
+          action: string | null
+          copied_at: string | null
+          current_level: string | null
+          description: string | null
+          id: string
+          priority: string
+          skill: string
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          target_level: string | null
+          version_id: string
+        }
+        Insert: {
+          action?: string | null
+          copied_at?: string | null
+          current_level?: string | null
+          description?: string | null
+          id?: string
+          priority?: string
+          skill: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          target_level?: string | null
+          version_id: string
+        }
+        Update: {
+          action?: string | null
+          copied_at?: string | null
+          current_level?: string | null
+          description?: string | null
+          id?: string
+          priority?: string
+          skill?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          target_level?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_skill_gaps_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_source_tracks: {
+        Row: {
+          copied_at: string
+          id: string
+          role: string
+          sort_order: number
+          track_code: string
+          track_id: string | null
+          track_name: string | null
+          track_version: string
+          track_version_id: string | null
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string
+          id?: string
+          role?: string
+          sort_order?: number
+          track_code: string
+          track_id?: string | null
+          track_name?: string | null
+          track_version: string
+          track_version_id?: string | null
+          version_id: string
+        }
+        Update: {
+          copied_at?: string
+          id?: string
+          role?: string
+          sort_order?: number
+          track_code?: string
+          track_id?: string | null
+          track_name?: string | null
+          track_version?: string
+          track_version_id?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_source_tracks_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_target_capabilities: {
+        Row: {
+          copied_at: string | null
+          description: string | null
+          evidence: string | null
+          id: string
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          title: string
+          version_id: string
+        }
+        Insert: {
+          copied_at?: string | null
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title: string
+          version_id: string
+        }
+        Update: {
+          copied_at?: string | null
+          description?: string | null
+          evidence?: string | null
+          id?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_target_capabilities_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_version_internal: {
+        Row: {
+          internal_notes: string | null
+          override_reason: string | null
+          updated_at: string
+          version_id: string
+        }
+        Insert: {
+          internal_notes?: string | null
+          override_reason?: string | null
+          updated_at?: string
+          version_id: string
+        }
+        Update: {
+          internal_notes?: string | null
+          override_reason?: string | null
+          updated_at?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_version_internal_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: true
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_versions: {
+        Row: {
+          alt_career_path: string | null
+          alt_target_role: string | null
+          approval_remarks: string | null
+          approved_at: string | null
+          approved_by: string | null
+          assessment_code: string | null
+          assessment_id: string | null
+          assessment_override: boolean
+          assessment_snapshot: Json
+          base_track_code: string | null
+          base_track_id: string | null
+          base_track_name: string | null
+          base_track_version: string | null
+          base_track_version_id: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          change_reason: string | null
+          created_at: string
+          created_by: string | null
+          created_from_version: number | null
+          current_profile_summary: string | null
+          daily_hours: number | null
+          duration_ack: boolean
+          expected_outcome: string | null
+          id: string
+          lock_version: number
+          pcb_id: string
+          preferred_location: string | null
+          primary_career_path: string | null
+          primary_target_role: string | null
+          rationale: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          target_completion_window: string | null
+          target_duration_days: number
+          target_industry: string | null
+          transition_goal: string | null
+          updated_at: string
+          updated_by: string | null
+          version: number
+          weekly_days: number | null
+        }
+        Insert: {
+          alt_career_path?: string | null
+          alt_target_role?: string | null
+          approval_remarks?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assessment_code?: string | null
+          assessment_id?: string | null
+          assessment_override?: boolean
+          assessment_snapshot?: Json
+          base_track_code?: string | null
+          base_track_id?: string | null
+          base_track_name?: string | null
+          base_track_version?: string | null
+          base_track_version_id?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          change_reason?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_from_version?: number | null
+          current_profile_summary?: string | null
+          daily_hours?: number | null
+          duration_ack?: boolean
+          expected_outcome?: string | null
+          id?: string
+          lock_version?: number
+          pcb_id: string
+          preferred_location?: string | null
+          primary_career_path?: string | null
+          primary_target_role?: string | null
+          rationale?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          target_completion_window?: string | null
+          target_duration_days?: number
+          target_industry?: string | null
+          transition_goal?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version: number
+          weekly_days?: number | null
+        }
+        Update: {
+          alt_career_path?: string | null
+          alt_target_role?: string | null
+          approval_remarks?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assessment_code?: string | null
+          assessment_id?: string | null
+          assessment_override?: boolean
+          assessment_snapshot?: Json
+          base_track_code?: string | null
+          base_track_id?: string | null
+          base_track_name?: string | null
+          base_track_version?: string | null
+          base_track_version_id?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          change_reason?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_from_version?: number | null
+          current_profile_summary?: string | null
+          daily_hours?: number | null
+          duration_ack?: boolean
+          expected_outcome?: string | null
+          id?: string
+          lock_version?: number
+          pcb_id?: string
+          preferred_location?: string | null
+          primary_career_path?: string | null
+          primary_target_role?: string | null
+          rationale?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          target_completion_window?: string | null
+          target_duration_days?: number
+          target_industry?: string | null
+          transition_goal?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          weekly_days?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_versions_pcb_id_fkey"
+            columns: ["pcb_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_pcbs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_weekly_review_items: {
+        Row: {
+          id: string
+          item: string
+          sort_order: number
+          version_id: string
+          weekly_review_id: string
+        }
+        Insert: {
+          id?: string
+          item: string
+          sort_order?: number
+          version_id: string
+          weekly_review_id: string
+        }
+        Update: {
+          id?: string
+          item?: string
+          sort_order?: number
+          version_id?: string
+          weekly_review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_weekly_review_items_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pcb_weekly_review_items_weekly_review_id_fkey"
+            columns: ["weekly_review_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_weekly_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pcb_weekly_reviews: {
+        Row: {
+          copied_at: string | null
+          expected_progress: string | null
+          guidance: string | null
+          id: string
+          sort_order: number
+          source_entity_id: string | null
+          source_track_code: string | null
+          source_track_version: string | null
+          source_type: string
+          title: string
+          version_id: string
+          week_number: number | null
+        }
+        Insert: {
+          copied_at?: string | null
+          expected_progress?: string | null
+          guidance?: string | null
+          id?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title: string
+          version_id: string
+          week_number?: number | null
+        }
+        Update: {
+          copied_at?: string | null
+          expected_progress?: string | null
+          guidance?: string | null
+          id?: string
+          sort_order?: number
+          source_entity_id?: string | null
+          source_track_code?: string | null
+          source_track_version?: string | null
+          source_type?: string
+          title?: string
+          version_id?: string
+          week_number?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pcb_weekly_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
             referencedColumns: ["id"]
           },
         ]
@@ -2320,6 +3411,8 @@ export type Database = {
         Args: { _cid: string }
         Returns: boolean
       }
+      can_read_pcb_candidate: { Args: { _cid: string }; Returns: boolean }
+      can_read_pcb_version: { Args: { _vid: string }; Returns: boolean }
       candidate_assert: {
         Args: { _id: string; _permission: string }
         Returns: undefined
@@ -2360,6 +3453,11 @@ export type Database = {
       current_user_context: { Args: never; Returns: Json }
       has_permission: { Args: { _key: string; _uid: string }; Returns: boolean }
       is_active_user: { Args: { _uid: string }; Returns: boolean }
+      pcb_copy_children: {
+        Args: { _dst: string; _src: string }
+        Returns: undefined
+      }
+      pcb_portal_summary: { Args: never; Returns: Json }
       record_login: { Args: never; Returns: undefined }
       track_copy_version: {
         Args: {
