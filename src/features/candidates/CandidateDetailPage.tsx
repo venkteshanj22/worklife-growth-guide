@@ -25,7 +25,6 @@ import { AssessmentTab } from "@/features/assessments/AssessmentTab";
 import { PcbTab } from "@/features/pcb/PcbTab";
 import { RoadmapTab } from "@/features/roadmaps/RoadmapTab";
 const FUTURE = [
-  "Roadmap",
   "Weekly Reviews",
   "Projects",
   "Tasks",
