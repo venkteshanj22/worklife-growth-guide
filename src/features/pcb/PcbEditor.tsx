@@ -166,10 +166,10 @@ function HeaderForm({ d, editable, fields, onDirty, internal }: { d: PcbDetail; 
     <div className="grid gap-4 sm:grid-cols-2">
       {fields.map((f) => (
         <div key={f.key} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
-          <Label className="mb-1.5 block text-xs text-muted-foreground">{f.label}</Label>
+          <Label htmlFor={`h-${f.key}`} className="mb-1.5 block text-xs text-muted-foreground">{f.label}</Label>
           {f.type === "textarea"
-            ? <Textarea rows={3} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
-            : <Input type={f.type === "number" ? "number" : "text"} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: f.type === "number" && e.target.value !== "" ? Number(e.target.value) : e.target.value })} />}
+            ? <Textarea id={`h-${f.key}`} rows={3} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
+            : <Input id={`h-${f.key}`} type={f.type === "number" ? "number" : "text"} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: f.type === "number" && e.target.value !== "" ? Number(e.target.value) : e.target.value })} />}
         </div>
       ))}
       {internal && (
