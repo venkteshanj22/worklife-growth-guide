@@ -32,7 +32,7 @@ export function CandidateExecTab({ kind, candidateId }: { kind: Kind; candidateI
   const createBtn = kind === "REVIEW" ? (can("weekly_review.create") && <Button onClick={() => setDlg(true)}><Plus className="size-4" /> Schedule Review</Button>)
     : kind === "PROJECT" ? (can("project.initialize") && pending.length > 0 && <Button onClick={() => setDlg(true)}><Plus className="size-4" /> Initialize Projects</Button>)
     : (can("premium_task.create") && (d.entitled ? <Button onClick={() => setDlg(true)}><Plus className="size-4" /> Assign Task</Button> : null));
-  const due = (r: Record<string, unknown>) => (kind === "REVIEW" ? r.scheduled_date : kind === "PROJECT" ? r.planned_due_date : r.due_date) as string | null;
+  const due = (r: Record<string, unknown>) => (kind === "REVIEW" ? r["scheduled_date"] : kind === "PROJECT" ? r["planned_due_date"] : r["due_date"]) as string | null;
   return (
     <div className="space-y-4">
       {kind === "TASK" && !d.entitled && <Panel className="p-4 text-sm text-muted-foreground">{NOT_ENTITLED} {d.rows.length > 0 && "Earlier tasks remain visible below."}</Panel>}

@@ -27,7 +27,7 @@ export function ExecListPage({ kind }: { kind: Kind }) {
   const [consultant, setConsultant] = useState(ALL);
   const [overdueOnly, setOverdueOnly] = useState(false);
   const m = META[kind];
-  const due = (r: Record<string, unknown>) => (kind === "REVIEW" ? r.scheduled_date : kind === "PROJECT" ? r.planned_due_date : r.due_date) as string | null;
+  const due = (r: Record<string, unknown>) => (kind === "REVIEW" ? r["scheduled_date"] : kind === "PROJECT" ? r["planned_due_date"] : r["due_date"]) as string | null;
   const reviewers = [...new Set(data.rows.map((r) => r.reviewer).filter(Boolean))];
   const consultants = [...new Set(data.rows.map((r) => r.consultant).filter(Boolean))];
   const rows = useMemo(() => {

@@ -15,6 +15,8 @@ const txt = (n = 4000) => z.string().max(n).nullable().optional();
 const url = z.string().trim().max(500).refine((v) => !v || /^https?:\/\/\S+$/i.test(v), "Enter a full link starting with http:// or https://").nullable().optional();
 type Ctx = { supabase: Admin; userId: string };
 type Any = Record<string, unknown>;
+type Cell = string | number | boolean | null;
+type Rec = { [k: string]: Cell };
 
 const TABLE = { REVIEW: "candidate_weekly_reviews", PROJECT: "candidate_projects", TASK: "candidate_premium_tasks" } as const;
 const PERM = { REVIEW: "weekly_review", PROJECT: "project", TASK: "premium_task" } as const;
@@ -98,7 +100,7 @@ export const listExecution = createServerFn({ method: "POST" })
       rows: list.map(({ candidates, candidate_roadmaps, ...r }) => ({
         ...r, candidate_code: candidates?.candidate_code ?? "", candidate_name: candidates?.full_name ?? "", roadmap_code: candidate_roadmaps?.code ?? null,
         consultant: cons.get(r.candidate_id) ?? "", reviewer: r.reviewer_id ? rev.get(r.reviewer_id) ?? "" : "",
-      })) as (Any & { id: string; code: string; status: string; candidate_code: string; candidate_name: string; consultant: string; reviewer: string; roadmap_code: string | null })[],
+      })) as (Rec & { id: string; code: string; status: string; candidate_code: string; candidate_name: string; consultant: string; reviewer: string; roadmap_code: string | null })[],
     };
   });
 
@@ -125,7 +127,7 @@ export const getExecution = createServerFn({ method: "POST" })
     ]);
     const n = await names(s, [rec.reviewer_id, rec.completed_by, rec.missed_by, rec.corrected_by]);
     return {
-      record: rec as Any & { id: string; code: string; candidate_id: string; status: string; lock_version: number; reviewer_id: string | null },
+      record: rec as Rec & { id: string; code: string; candidate_id: string; status: string; lock_version: number; reviewer_id: string | null },
       candidate: rec.candidates as { candidate_code: string; full_name: string; program_plan: string | null },
       roadmapCode: (rec.candidate_roadmaps as { code: string } | null)?.code ?? null,
       names: Object.fromEntries(n), history: hist.data ?? [], submissions: subs.data ?? [], reviews: revs.data ?? [],
@@ -158,7 +160,7 @@ export const candidateExecution = createServerFn({ method: "POST" })
     const n = await names(s, list.map((r) => r.reviewer_id));
     return {
       candidate: cand, roadmap: rm, sources, staff: await reviewerOptions(s), today: todayIST(), entitled: isPremium(cand.program_plan),
-      rows: list.map((r) => ({ ...r, reviewer: r.reviewer_id ? n.get(r.reviewer_id) ?? "" : "" })) as (Any & { id: string; code: string; status: string; reviewer: string })[],
+      rows: list.map((r) => ({ ...r, reviewer: r.reviewer_id ? n.get(r.reviewer_id) ?? "" : "" })) as unknown as (Rec & { id: string; code: string; status: string; reviewer: string })[],
     };
   });
 
@@ -394,7 +396,7 @@ export const myWorkList = createServerFn({ method: "POST" })
     if (!m) return null;
     const entitled = isPremium(m.plan);
     const { data: rows } = await tbl(m.admin, data.kind).select(WORK_SAFE[data.kind]).eq("candidate_id", m.cid).neq("status", "CANCELLED").order("created_at", { ascending: false }).limit(100);
-    const list = (rows ?? []) as (Any & { id: string; code: string; name: string; status: string; lock_version: number; candidate_feedback: string | null })[];
+    const list = (rows ?? []) as (Rec & { id: string; code: string; name: string; status: string; lock_version: number; candidate_feedback: string | null })[];
     const ids = list.map((r) => r.id);
     const { data: fb } = ids.length ? await m.admin.from("candidate_execution_reviews").select("record_id, outcome, candidate_feedback, created_at").in("record_id", ids).order("created_at", { ascending: false }) : { data: [] };
     return { entitled, today: todayIST(), rows: list.map((r) => ({ ...r, feedback: (fb ?? []).filter((f) => f.record_id === r.id && f.candidate_feedback) })) };
