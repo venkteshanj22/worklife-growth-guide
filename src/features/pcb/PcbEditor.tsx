@@ -79,8 +79,8 @@ function EditorBody({ d }: { d: PcbDetail }) {
             ))}
           </TabsList>
         </div>
-        <TabsContent value="Overview" className="mt-6"><Overview d={d} editable={editable} onDirty={markDirty("overview")} /></TabsContent>
-        <TabsContent value="Career Direction" className="mt-6"><Direction d={d} editable={editable} onDirty={markDirty("direction")} /></TabsContent>
+        <TabsContent forceMount value="Overview" className="mt-6 data-[state=inactive]:hidden"><Overview d={d} editable={editable} onDirty={markDirty("overview")} /></TabsContent>
+        <TabsContent forceMount value="Career Direction" className="mt-6 data-[state=inactive]:hidden"><Direction d={d} editable={editable} onDirty={markDirty("direction")} /></TabsContent>
         <TabsContent value="Skill Gap" className="mt-6">
           <PcbList table="pcb_skill_gaps" noun="skill gap" title="Skill gaps" rows={v.pcb_skill_gaps} editable={editable} fields={GAP_FIELDS} defaults={{ priority: "MEDIUM" }}
             summary={(g) => <><span className="font-medium">{g.skill}</span> <span className="ml-2 text-xs text-muted-foreground">{lbl(g.current_level)} → {lbl(g.target_level)} · {lbl(g.priority)}</span>{g.action && <p className="text-xs text-muted-foreground">{g.action}</p>}</>} />
