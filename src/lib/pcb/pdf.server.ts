@@ -1,7 +1,7 @@
 // A4 PCB document using pdf-lib (Worker-compatible). Source labels and internal data are never printed.
 import { PDFDocument, StandardFonts, rgb, degrees, type PDFFont, type PDFPage } from "pdf-lib";
 import type { CandidateSnapshot, FullVersion } from "./pcb.server";
-import { pcbDisplayId, plannedDays } from "./model";
+import { dataSectionEmpty, pcbDisplayId, plannedDays } from "./model";
 
 const A4 = { w: 595.28, h: 841.89 };
 const M = 56;
@@ -161,6 +161,7 @@ export async function buildPcbPdf({ version: v, pcbCode, candidate: c, draft }: 
   for (const b of v.pcb_content_blocks.filter((x) => x.is_included && x.code !== "DATA_COVER")) {
     const hasData = b.block_type === "DATA";
     if (!hasData && !(b.content ?? "").trim()) continue;
+    if (hasData && b.code && dataSectionEmpty(b.code, v) && !(b.content ?? "").trim()) continue;
     heading(b.title);
     if (b.content?.trim()) text(b.content, { gap: 8 });
     if (hasData && b.code) renderData(b.code);

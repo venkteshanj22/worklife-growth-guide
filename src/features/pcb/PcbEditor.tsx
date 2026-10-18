@@ -79,10 +79,10 @@ function EditorBody({ d }: { d: PcbDetail }) {
             ))}
           </TabsList>
         </div>
-        <TabsContent value="Overview" className="mt-6"><Overview d={d} editable={editable} onDirty={markDirty("overview")} /></TabsContent>
-        <TabsContent value="Career Direction" className="mt-6"><Direction d={d} editable={editable} onDirty={markDirty("direction")} /></TabsContent>
+        <TabsContent forceMount value="Overview" className="mt-6 data-[state=inactive]:hidden"><Overview d={d} editable={editable} onDirty={markDirty("overview")} /></TabsContent>
+        <TabsContent forceMount value="Career Direction" className="mt-6 data-[state=inactive]:hidden"><Direction d={d} editable={editable} onDirty={markDirty("direction")} /></TabsContent>
         <TabsContent value="Skill Gap" className="mt-6">
-          <PcbList table="pcb_skill_gaps" noun="skill gap" title="Skill gaps" rows={v.pcb_skill_gaps} editable={editable} fields={GAP_FIELDS}
+          <PcbList table="pcb_skill_gaps" noun="skill gap" title="Skill gaps" rows={v.pcb_skill_gaps} editable={editable} fields={GAP_FIELDS} defaults={{ priority: "MEDIUM" }}
             summary={(g) => <><span className="font-medium">{g.skill}</span> <span className="ml-2 text-xs text-muted-foreground">{lbl(g.current_level)} → {lbl(g.target_level)} · {lbl(g.priority)}</span>{g.action && <p className="text-xs text-muted-foreground">{g.action}</p>}</>} />
           <p className="mt-3 text-xs text-muted-foreground">Editing PCB skill gaps never changes the assessment.</p>
         </TabsContent>
@@ -99,7 +99,7 @@ function EditorBody({ d }: { d: PcbDetail }) {
             summary={(m) => <><span className="mr-2 text-xs text-muted-foreground">{m.target_day ? `Day ${m.target_day}` : "—"}</span><span className="font-medium">{m.name}</span></>} />
         </TabsContent>
         <TabsContent value="Projects" className="mt-6">
-          <PcbList table="pcb_projects" noun="project" title="Projects" rows={v.pcb_projects} editable={editable} fields={PROJECT_FIELDS} defaults={{ project_type: "MINI" }}
+          <PcbList table="pcb_projects" noun="project" title="Projects" rows={v.pcb_projects} editable={editable} fields={PROJECT_FIELDS} defaults={{ project_type: "MINI_PROJECT" }}
             summary={(p) => <><span className="font-medium">{p.name}</span> <span className="ml-2 text-xs text-muted-foreground">{lbl(p.project_type)}{p.start_day ? ` · Day ${p.start_day}–${p.end_day ?? "?"}` : ""}</span>{p.scenario && <p className="text-xs text-muted-foreground">{p.scenario}</p>}</>} />
         </TabsContent>
         <TabsContent value="Weekly Plan" className="mt-6">
@@ -137,7 +137,7 @@ const GAP_FIELDS: FieldDef[] = [
   { key: "description", label: "Gap description", type: "textarea" }, { key: "action", label: "Recommended action", type: "textarea" },
 ];
 const PROJECT_FIELDS: FieldDef[] = [
-  { key: "name", label: "Project name", required: true }, { key: "project_type", label: "Type", type: "select", required: true, options: { MINI: "Mini", INTEGRATED: "Integrated", CAPSTONE: "Capstone", PORTFOLIO: "Portfolio" } },
+  { key: "name", label: "Project name", required: true }, { key: "project_type", label: "Type", type: "select", required: true, options: { PRACTICE_PROJECT: "Practice Project", MINI_PROJECT: "Mini Project", INTEGRATED: "Integrated Project", CAPSTONE: "Capstone", PORTFOLIO: "Portfolio" } },
   { key: "scenario", label: "Business scenario", type: "textarea" }, { key: "description", label: "Description", type: "textarea" },
   { key: "technologies", label: "Technologies", wide: true }, { key: "features", label: "Expected features", type: "textarea" }, { key: "deliverables", label: "Expected deliverables", type: "textarea" },
   { key: "start_day", label: "Suggested start day", type: "number" }, { key: "end_day", label: "Suggested completion day", type: "number" },
@@ -166,10 +166,10 @@ function HeaderForm({ d, editable, fields, onDirty, internal }: { d: PcbDetail; 
     <div className="grid gap-4 sm:grid-cols-2">
       {fields.map((f) => (
         <div key={f.key} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
-          <Label className="mb-1.5 block text-xs text-muted-foreground">{f.label}</Label>
+          <Label htmlFor={`h-${f.key}`} className="mb-1.5 block text-xs text-muted-foreground">{f.label}</Label>
           {f.type === "textarea"
-            ? <Textarea rows={3} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
-            : <Input type={f.type === "number" ? "number" : "text"} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: f.type === "number" && e.target.value !== "" ? Number(e.target.value) : e.target.value })} />}
+            ? <Textarea id={`h-${f.key}`} rows={3} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
+            : <Input id={`h-${f.key}`} type={f.type === "number" ? "number" : "text"} disabled={!editable} value={String(form[f.key] ?? "")} onChange={(e) => setForm({ ...form, [f.key]: f.type === "number" && e.target.value !== "" ? Number(e.target.value) : e.target.value })} />}
         </div>
       ))}
       {internal && (
