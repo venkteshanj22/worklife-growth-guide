@@ -33,8 +33,8 @@ export function ExecListPage({ kind }: { kind: Kind }) {
   const rows = useMemo(() => {
     const s = q.trim().toLowerCase();
     return data.rows.filter((r) =>
-      (!s || [r.code, r.candidate_code, r.candidate_name, r.name as string | undefined].some((v) => v?.toLowerCase().includes(s))) &&
-      (status === ALL || r.status === status) && (result === ALL || r.result === result) && (reviewer === ALL || r.reviewer === reviewer) &&
+      (!s || [r.code, r.candidate_code, r.candidate_name, r["name"] as string | undefined].some((v) => v?.toLowerCase().includes(s))) &&
+      (status === ALL || r.status === status) && (result === ALL || r["result"] === result) && (reviewer === ALL || r.reviewer === reviewer) &&
       (consultant === ALL || r.consultant === consultant) && (!overdueOnly || isOverdue(kind, r.status, due(r), data.today)));
   }, [data, q, status, result, reviewer, consultant, overdueOnly, kind]);
   const sel = (v: string, set: (v: string) => void, opts: string[], ph: string, fmt = (x: string) => x) => (
@@ -74,17 +74,17 @@ export function ExecListPage({ kind }: { kind: Kind }) {
                     <td className="p-3"><Link to={to} params={{ id: r.id }} className="font-medium text-primary hover:underline">{r.code}</Link></td>
                     <td className="p-3"><div className="font-medium">{r.candidate_name}</div><div className="text-xs text-muted-foreground">{r.candidate_code}</div></td>
                     {kind === "REVIEW" ? <>
-                      <td className="p-3">Week {String(r.week_number)}</td><td className="p-3">{r.roadmap_code ?? "—"}</td>
-                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r.scheduled_date as string)}{over && <Overdue />}</div></td>
-                      <td className="p-3">{formatDate(r.actual_date as string | null)}</td><td className="p-3">{r.snap_progress != null ? `${String(r.snap_progress)}%` : "—"}</td><td className="p-3"><ExBadge status={r.result as string | null} /></td>
+                      <td className="p-3">Week {String(r["week_number"])}</td><td className="p-3">{r.roadmap_code ?? "—"}</td>
+                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r["scheduled_date"] as string)}{over && <Overdue />}</div></td>
+                      <td className="p-3">{formatDate(r["actual_date"] as string | null)}</td><td className="p-3">{r["snap_progress"] != null ? `${String(r["snap_progress"])}%` : "—"}</td><td className="p-3"><ExBadge status={r["result"] as string | null} /></td>
                     </> : kind === "PROJECT" ? <>
-                      <td className="p-3">{String(r.name)}</td><td className="p-3">{String(r.project_type ?? "—")}</td><td className="p-3">{r.roadmap_code ?? "—"}</td>
-                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r.planned_due_date as string | null)}{over && <Overdue />}</div></td><td className="p-3">{formatDate(r.submitted_at as string | null)}</td>
+                      <td className="p-3">{String(r["name"])}</td><td className="p-3">{String(r["project_type"] ?? "—")}</td><td className="p-3">{r.roadmap_code ?? "—"}</td>
+                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r["planned_due_date"] as string | null)}{over && <Overdue />}</div></td><td className="p-3">{formatDate(r["submitted_at"] as string | null)}</td>
                     </> : <>
-                      <td className="p-3">{String(r.name)}</td><td className="p-3">{formatDate(r.assigned_date as string)}</td>
-                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r.due_date as string | null)}{over && <Overdue />}</div></td><td className="p-3">{String(r.assigned_by_name ?? "—")}</td><td className="p-3">{formatDate(r.submitted_at as string | null)}</td>
+                      <td className="p-3">{String(r["name"])}</td><td className="p-3">{formatDate(r["assigned_date"] as string)}</td>
+                      <td className="p-3"><div className="flex items-center gap-2">{formatDate(r["due_date"] as string | null)}{over && <Overdue />}</div></td><td className="p-3">{String(r["assigned_by_name"] ?? "—")}</td><td className="p-3">{formatDate(r["submitted_at"] as string | null)}</td>
                     </>}
-                    <td className="p-3">{r.reviewer || "—"}</td><td className="p-3"><ExBadge status={r.status} /></td><td className="p-3 text-muted-foreground">{formatDate(r.last_activity_at as string, true)}</td>
+                    <td className="p-3">{r.reviewer || "—"}</td><td className="p-3"><ExBadge status={r.status} /></td><td className="p-3 text-muted-foreground">{formatDate(r["last_activity_at"] as string, true)}</td>
                   </tr>
                 );
               })}
