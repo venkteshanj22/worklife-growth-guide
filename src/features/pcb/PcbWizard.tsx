@@ -106,6 +106,8 @@ export function PcbWizard({ initialCandidate }: { initialCandidate?: string | un
             {d?.existing && <p className="text-sm text-destructive">This candidate already has {d.existing.pcb_code}. Open it from the candidate's PCB tab or the PCB Library.</p>}
           </div>
         )}
+        {ctx.isLoading && <p className="text-sm text-muted-foreground">Loading candidate…</p>}
+        {ctx.error && <p className="text-sm text-destructive">{ctx.error.message}</p>}
         {step >= 1 && d && step < 5 && (
           <div className="mb-5 rounded-md bg-muted/50 px-4 py-3 text-sm"><span className="font-medium">{d.candidate.full_name}</span> <span className="ml-2 text-muted-foreground">{d.candidate.candidate_code}</span></div>
         )}
