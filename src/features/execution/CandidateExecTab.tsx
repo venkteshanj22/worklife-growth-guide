@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Panel, formatDate } from "@/components/app/shared";
 import { useCurrentUser } from "@/lib/auth/use-current-user";
-import { assignTask, initProjects, scheduleReview } from "@/lib/execution/execution.functions";
+import { assignTask, initProjects, scheduleReview, type CandidateExec } from "@/lib/execution/execution.functions";
 import { isOverdue, NOT_ENTITLED, type Kind } from "@/lib/execution/model";
 import { candidateExecQuery, useRefreshExec } from "./queries";
 import { ExBadge, Field, Overdue, useAction } from "./parts";
@@ -56,7 +56,7 @@ export function CandidateExecTab({ kind, candidateId }: { kind: Kind; candidateI
   );
 }
 
-function CreateDialog({ kind, candidateId, data, onClose }: { kind: Kind; candidateId: string; data: NonNullable<ReturnType<typeof useQuery<Awaited<ReturnType<ReturnType<typeof candidateExecQuery>["queryFn"] & object>>>>["data"]>; onClose: () => void }) {
+function CreateDialog({ kind, candidateId, data, onClose }: { kind: Kind; candidateId: string; data: CandidateExec; onClose: () => void }) {
   const refresh = useRefreshExec();
   const { busy, run } = useAction();
   const nextWeek = data.rows.reduce((m, r) => Math.max(m, Number(r.week_number ?? 0)), 0) + 1;

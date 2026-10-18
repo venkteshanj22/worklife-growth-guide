@@ -162,6 +162,8 @@ export const candidateExecution = createServerFn({ method: "POST" })
     };
   });
 
+export type CandidateExec = Awaited<ReturnType<typeof candidateExecution>>;
+
 // ---------- Weekly reviews ----------
 
 export const scheduleReview = createServerFn({ method: "POST" })

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { myPlanQuery } from "@/features/execution/queries";
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -20,9 +22,10 @@ const linkCls = "flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sideb
 const activeCls = "bg-sidebar-accent font-medium text-sidebar-accent-foreground";
 
 function PortalNav({ onNavigate }: { onNavigate?: () => void }) {
+  const plan = useQuery(myPlanQuery);
   return (
     <nav className="space-y-0.5" aria-label="Portal">
-      {PORTAL_NAV.map((item) =>
+      {PORTAL_NAV.filter((item) => !item.premiumOnly || plan.data?.premium).map((item) =>
         item.slug ? (
           <Link key={item.label} to="/portal/$section" params={{ section: item.slug }} onClick={onNavigate} className={linkCls} activeProps={{ className: activeCls }}>
             <item.icon className="size-4 opacity-70" />{item.label}
