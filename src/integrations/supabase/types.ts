@@ -1108,6 +1108,657 @@ export type Database = {
         }
         Relationships: []
       }
+      candidate_roadmap_activity: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          event: string
+          id: string
+          metadata: Json
+          roadmap_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          event: string
+          id?: string
+          metadata?: Json
+          roadmap_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          event?: string
+          id?: string
+          metadata?: Json
+          roadmap_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_activity_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_item_status_history: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          is_candidate: boolean
+          item_id: string
+          roadmap_id: string
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          is_candidate?: boolean
+          item_id: string
+          roadmap_id: string
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          is_candidate?: boolean
+          item_id?: string
+          roadmap_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_item_status_history_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_item_status_history_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_items: {
+        Row: {
+          activity: string | null
+          actual_minutes: number | null
+          candidate_notes: string | null
+          completed_at: string | null
+          day_number: number
+          description: string | null
+          expected_output: string | null
+          id: string
+          learning_minutes: number | null
+          lock_version: number
+          module_id: string
+          notes_updated_at: string | null
+          objective: string | null
+          phase_id: string
+          planned_date: string | null
+          practice_minutes: number | null
+          roadmap_id: string
+          sort_order: number
+          source_pcb_day_item_id: string | null
+          started_at: string | null
+          status: string
+          title: string
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          activity?: string | null
+          actual_minutes?: number | null
+          candidate_notes?: string | null
+          completed_at?: string | null
+          day_number: number
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          learning_minutes?: number | null
+          lock_version?: number
+          module_id: string
+          notes_updated_at?: string | null
+          objective?: string | null
+          phase_id: string
+          planned_date?: string | null
+          practice_minutes?: number | null
+          roadmap_id: string
+          sort_order?: number
+          source_pcb_day_item_id?: string | null
+          started_at?: string | null
+          status?: string
+          title: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activity?: string | null
+          actual_minutes?: number | null
+          candidate_notes?: string | null
+          completed_at?: string | null
+          day_number?: number
+          description?: string | null
+          expected_output?: string | null
+          id?: string
+          learning_minutes?: number | null
+          lock_version?: number
+          module_id?: string
+          notes_updated_at?: string | null
+          objective?: string | null
+          phase_id?: string
+          planned_date?: string | null
+          practice_minutes?: number | null
+          roadmap_id?: string
+          sort_order?: number
+          source_pcb_day_item_id?: string | null
+          started_at?: string | null
+          status?: string
+          title?: string
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_items_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_items_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_items_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_modules: {
+        Row: {
+          id: string
+          name: string
+          objective: string | null
+          phase_id: string
+          roadmap_id: string
+          sort_order: number
+          source_pcb_module_id: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          objective?: string | null
+          phase_id: string
+          roadmap_id: string
+          sort_order?: number
+          source_pcb_module_id?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          objective?: string | null
+          phase_id?: string
+          roadmap_id?: string
+          sort_order?: number
+          source_pcb_module_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_modules_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_modules_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_phases: {
+        Row: {
+          id: string
+          name: string
+          objective: string | null
+          phase_number: number | null
+          roadmap_id: string
+          sort_order: number
+          source_pcb_phase_id: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          objective?: string | null
+          phase_number?: number | null
+          roadmap_id: string
+          sort_order?: number
+          source_pcb_phase_id?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          objective?: string | null
+          phase_number?: number | null
+          roadmap_id?: string
+          sort_order?: number
+          source_pcb_phase_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_phases_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_projects: {
+        Row: {
+          description: string | null
+          end_day: number | null
+          id: string
+          name: string
+          project_type: string | null
+          roadmap_id: string
+          sort_order: number
+          source_pcb_project_id: string | null
+          start_day: number | null
+        }
+        Insert: {
+          description?: string | null
+          end_day?: number | null
+          id?: string
+          name: string
+          project_type?: string | null
+          roadmap_id: string
+          sort_order?: number
+          source_pcb_project_id?: string | null
+          start_day?: number | null
+        }
+        Update: {
+          description?: string | null
+          end_day?: number | null
+          id?: string
+          name?: string
+          project_type?: string | null
+          roadmap_id?: string
+          sort_order?: number
+          source_pcb_project_id?: string | null
+          start_day?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_projects_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_remarks: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          body: string
+          created_at: string
+          id: string
+          is_internal: boolean
+          item_id: string
+          roadmap_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          item_id: string
+          roadmap_id: string
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean
+          item_id?: string
+          roadmap_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_remarks_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_remarks_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_resource_mappings: {
+        Row: {
+          id: string
+          item_id: string | null
+          module_id: string | null
+          phase_id: string | null
+          resource_id: string
+          roadmap_id: string
+        }
+        Insert: {
+          id?: string
+          item_id?: string | null
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id: string
+          roadmap_id: string
+        }
+        Update: {
+          id?: string
+          item_id?: string | null
+          module_id?: string | null
+          phase_id?: string | null
+          resource_id?: string
+          roadmap_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_resource_mappings_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_resource_mappings_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_resource_mappings_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_phases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_resource_mappings_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmap_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmap_resource_mappings_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_resources: {
+        Row: {
+          course_name: string | null
+          id: string
+          is_paid: boolean
+          name: string
+          notes: string | null
+          provider: string | null
+          resource_type: string
+          roadmap_id: string
+          section: string | null
+          sort_order: number
+          source_pcb_resource_id: string | null
+          url: string | null
+        }
+        Insert: {
+          course_name?: string | null
+          id?: string
+          is_paid?: boolean
+          name: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          roadmap_id: string
+          section?: string | null
+          sort_order?: number
+          source_pcb_resource_id?: string | null
+          url?: string | null
+        }
+        Update: {
+          course_name?: string | null
+          id?: string
+          is_paid?: boolean
+          name?: string
+          notes?: string | null
+          provider?: string | null
+          resource_type?: string
+          roadmap_id?: string
+          section?: string | null
+          sort_order?: number
+          source_pcb_resource_id?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_resources_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmap_status_history: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          reason: string | null
+          roadmap_id: string
+          to_status: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          roadmap_id: string
+          to_status: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          reason?: string | null
+          roadmap_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmap_status_history_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_roadmaps: {
+        Row: {
+          cancel_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          candidate_id: string
+          career_path: string | null
+          code: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          created_by: string | null
+          daily_hours: number | null
+          duration_days: number
+          id: string
+          last_activity_at: string
+          lock_version: number
+          pause_reason: string | null
+          paused_at: string | null
+          paused_by: string | null
+          pcb_code: string
+          pcb_id: string
+          pcb_version: number
+          pcb_version_id: string
+          resumed_at: string | null
+          resumed_by: string | null
+          start_date: string
+          started_at: string | null
+          started_by: string | null
+          status: string
+          target_end_date: string
+          target_role: string | null
+          updated_at: string
+          weekly_days: number
+        }
+        Insert: {
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          candidate_id: string
+          career_path?: string | null
+          code: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          daily_hours?: number | null
+          duration_days: number
+          id?: string
+          last_activity_at?: string
+          lock_version?: number
+          pause_reason?: string | null
+          paused_at?: string | null
+          paused_by?: string | null
+          pcb_code: string
+          pcb_id: string
+          pcb_version: number
+          pcb_version_id: string
+          resumed_at?: string | null
+          resumed_by?: string | null
+          start_date: string
+          started_at?: string | null
+          started_by?: string | null
+          status?: string
+          target_end_date: string
+          target_role?: string | null
+          updated_at?: string
+          weekly_days?: number
+        }
+        Update: {
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          candidate_id?: string
+          career_path?: string | null
+          code?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          daily_hours?: number | null
+          duration_days?: number
+          id?: string
+          last_activity_at?: string
+          lock_version?: number
+          pause_reason?: string | null
+          paused_at?: string | null
+          paused_by?: string | null
+          pcb_code?: string
+          pcb_id?: string
+          pcb_version?: number
+          pcb_version_id?: string
+          resumed_at?: string | null
+          resumed_by?: string | null
+          start_date?: string
+          started_at?: string | null
+          started_by?: string | null
+          status?: string
+          target_end_date?: string
+          target_role?: string | null
+          updated_at?: string
+          weekly_days?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_roadmaps_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmaps_pcb_id_fkey"
+            columns: ["pcb_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_pcbs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_roadmaps_pcb_version_id_fkey"
+            columns: ["pcb_version_id"]
+            isOneToOne: false
+            referencedRelation: "pcb_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidate_status_history: {
         Row: {
           candidate_id: string
@@ -3413,6 +4064,8 @@ export type Database = {
       }
       can_read_pcb_candidate: { Args: { _cid: string }; Returns: boolean }
       can_read_pcb_version: { Args: { _vid: string }; Returns: boolean }
+      can_read_roadmap: { Args: { _rid: string }; Returns: boolean }
+      can_read_roadmap_candidate: { Args: { _cid: string }; Returns: boolean }
       candidate_assert: {
         Args: { _id: string; _permission: string }
         Returns: undefined
@@ -3459,6 +4112,7 @@ export type Database = {
       }
       pcb_portal_summary: { Args: never; Returns: Json }
       record_login: { Args: never; Returns: undefined }
+      roadmap_my_candidate: { Args: never; Returns: string }
       track_copy_version: {
         Args: {
           _actor: string
