@@ -9,6 +9,7 @@ import { formatDate } from "@/components/app/shared";
 import { cn } from "@/lib/utils";
 import { isOverdue, statusLabel } from "@/lib/roadmaps/model";
 import { ROADMAP_KEYS } from "./queries";
+import { DATE_ORDER_WARNING } from "@/lib/execution/model";
 
 const TONE: Record<string, string> = {
   NOT_STARTED: "bg-muted text-muted-foreground", PENDING: "bg-muted text-muted-foreground",
@@ -58,11 +59,12 @@ export function DayCard({ item, today, resources, remarks, canExecute, mode, onS
 }) {
   const [open, setOpen] = useState(!!defaultOpen);
   const [notes, setNotes] = useState(item.candidate_notes ?? "");
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState<string | null>(null);
   const over = isOverdue(item, today);
-  const act = async (fn: () => Promise<unknown>, ok: string) => {
-    setBusy(true);
-    try { await fn(); toast.success(ok); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not update"); } finally { setBusy(false); }
+  const act = async (fn: () => Promise<unknown>, ok: string, key: string) => {
+    if (busy) return;
+    setBusy(key);
+    try { await fn(); toast.success(ok); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not update"); } finally { setBusy(null); }
   };
   const Icon = item.status === "COMPLETED" ? CheckCircle2 : item.status === "IN_PROGRESS" ? PlayCircle : Circle;
   return (
@@ -108,7 +110,7 @@ export function DayCard({ item, today, resources, remarks, canExecute, mode, onS
             {mode === "candidate" && canExecute ? (
               <div className="mt-1 space-y-2">
                 <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} placeholder="What did you do? Anything you need help with?" aria-label="My notes" />
-                {notes !== (item.candidate_notes ?? "") && <Button size="sm" variant="outline" disabled={busy} onClick={() => act(() => onNotes!(notes), "Notes saved")}>Save notes</Button>}
+                {notes !== (item.candidate_notes ?? "") && <Button size="sm" variant="outline" disabled={!!busy} onClick={() => act(() => onNotes!(notes), "Notes saved", "notes")}>{busy === "notes" ? "Saving…" : "Save notes"}</Button>}
               </div>
             ) : <p className="mt-0.5 whitespace-pre-wrap text-muted-foreground">{item.candidate_notes || "—"}</p>}
           </div>
@@ -127,8 +129,8 @@ export function DayCard({ item, today, resources, remarks, canExecute, mode, onS
           )}
           {mode === "candidate" && canExecute && item.status !== "COMPLETED" && (
             <div className="flex flex-col gap-2 sm:flex-row">
-              {item.status === "PENDING" && <Button size="lg" variant="outline" className="w-full sm:w-auto" disabled={busy} onClick={() => act(() => onStatus!("IN_PROGRESS"), "Marked as started")}>Start</Button>}
-              <Button size="lg" className="w-full sm:w-auto" disabled={busy} onClick={() => confirm(`Mark Day ${item.day_number} as complete?`) && act(() => onStatus!("COMPLETED"), "Marked complete")}>Mark Complete</Button>
+              {item.status === "PENDING" && <Button size="lg" variant="outline" className="w-full sm:w-auto" disabled={!!busy} onClick={() => act(() => onStatus!("IN_PROGRESS"), "Marked as started", "start")}>{busy === "start" ? "Starting…" : "Start"}</Button>}
+              <Button size="lg" className="w-full sm:w-auto" disabled={!!busy} onClick={() => confirm(`Mark Day ${item.day_number} as complete?`) && act(() => onStatus!("COMPLETED"), "Marked complete", "complete")}>{busy === "complete" ? "Saving…" : "Mark Complete"}</Button>
             </div>
           )}
           {staffSlot}
@@ -156,12 +158,20 @@ export function RemarkForm({ canInternal, onAdd }: { canInternal: boolean; onAdd
   );
 }
 
-export function DateEditor({ value, onSave }: { value: string | null; onSave: (d: string) => Promise<unknown> }) {
+export function DateEditor({ value, onSave, outOfOrder }: { value: string | null; onSave: (d: string) => Promise<unknown>; outOfOrder?: (d: string) => boolean }) {
   const [v, setV] = useState(value ?? "");
+  const warn = !!v && v !== value && !!outOfOrder?.(v);
+  const save = () => {
+    if (warn && !confirm(`${DATE_ORDER_WARNING}\n\nDay numbers will not change. Save this date anyway?`)) return;
+    onSave(v).then(() => toast.success("Date updated")).catch((e) => toast.error(e instanceof Error ? e.message : "Could not update"));
+  };
   return (
-    <div className="flex items-center gap-2">
-      <Input type="date" value={v} onChange={(e) => setV(e.target.value)} className="h-8 w-40" aria-label="Planned date" />
-      {v && v !== value && <Button size="sm" variant="outline" onClick={() => onSave(v).then(() => toast.success("Date updated")).catch((e) => toast.error(e instanceof Error ? e.message : "Could not update"))}>Save date</Button>}
+    <div className="space-y-1">
+      <div className="flex items-center gap-2">
+        <Input type="date" value={v} onChange={(e) => setV(e.target.value)} className="h-8 w-40" aria-label="Planned date" />
+        {v && v !== value && <Button size="sm" variant="outline" onClick={save}>Save date</Button>}
+      </div>
+      {warn && <p className="text-xs text-destructive" role="alert">{DATE_ORDER_WARNING}</p>}
     </div>
   );
 }
