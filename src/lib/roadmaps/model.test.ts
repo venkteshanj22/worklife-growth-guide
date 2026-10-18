@@ -51,6 +51,12 @@ describe("roadmap progress and health", () => {
   it("behind when oldest overdue is more than 3 learning days late", () => {
     expect(scheduleHealth([d(1, "PENDING", "2026-10-19")], "2026-10-23", 6).status).toBe("BEHIND");
   });
+  it("lateness counts learning days after the planned day, skipping non-learning days", () => {
+    // Planned Wed 14 Oct; today Sun 18 Oct; Mon–Sat schedule → Thu, Fri, Sat = 3 days late → Attention.
+    const h = scheduleHealth([d(1, "PENDING", "2026-10-14")], "2026-10-18", 6);
+    expect(h.status).toBe("ATTENTION");
+    expect(h.reason).toContain("3 learning days late");
+  });
 });
 
 describe("roadmap rules", () => {
