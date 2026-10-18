@@ -158,3 +158,9 @@ export const CAN_MOVE_TO_APPROVED = ["ASSESSMENT_COMPLETED", "PCB_PREPARATION"];
 
 export const PRIORITIES = { HIGH: "High", MEDIUM: "Medium", LOW: "Low" };
 export const LEVELS = { NONE: "None", BASIC: "Basic", INTERMEDIATE: "Intermediate", ADVANCED: "Advanced" };
+
+/** Data sections with no rows are skipped in preview/PDF. */
+export function dataSectionEmpty(code: string, v: { pcb_skill_gaps: unknown[]; pcb_target_capabilities: unknown[]; pcb_resources: unknown[]; pcb_day_items: unknown[]; pcb_milestones: unknown[]; pcb_projects: unknown[]; pcb_weekly_reviews: unknown[] }) {
+  const map: Record<string, unknown[]> = { DATA_SKILL_GAPS: v.pcb_skill_gaps, DATA_CAPABILITIES: v.pcb_target_capabilities, DATA_RESOURCES: v.pcb_resources, DATA_CURRICULUM: v.pcb_day_items, DATA_MILESTONES: v.pcb_milestones, DATA_PROJECTS: v.pcb_projects, DATA_WEEKLY: v.pcb_weekly_reviews };
+  return code in map && map[code]!.length === 0;
+}

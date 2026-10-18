@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { formatDate } from "@/components/app/shared";
-import { pcbDisplayId, plannedDays } from "@/lib/pcb/model";
+import { dataSectionEmpty, pcbDisplayId, plannedDays } from "@/lib/pcb/model";
 import type { PcbDetail } from "@/lib/pcb/pcb.functions";
 
 const lbl = (s?: string | null) => (s ? s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()) : "");
@@ -52,7 +52,7 @@ export function PcbPreview({ d }: { d: PcbDetail }) {
         <p className="mt-3 text-lg">{c.full_name}</p>
         <p className="text-sm text-muted-foreground">{c.candidate_code} · {pcbDisplayId(d.pcb.pcb_code, v.version)} · {v.status === "APPROVED" ? `Approved ${formatDate(v.approved_at)}` : "Draft preview"}</p>
       </header>
-      {v.pcb_content_blocks.filter((b) => b.is_included && b.code !== "DATA_COVER" && (b.block_type === "DATA" || (b.content ?? "").trim())).map((b) => (
+      {v.pcb_content_blocks.filter((b) => b.is_included && b.code !== "DATA_COVER" && ((b.block_type === "DATA" && !(b.code && dataSectionEmpty(b.code, v))) || (b.content ?? "").trim())).map((b) => (
         <section key={b.id} className="mb-7">
           <h2 className="mb-2 border-l-2 border-primary pl-2 font-semibold">{b.title}</h2>
           {b.content?.trim() && <p className="mb-2 whitespace-pre-wrap text-sm">{b.content}</p>}
