@@ -40,6 +40,8 @@ export const PERMISSIONS = {
   trackContentEdit: "track_content.edit",
   globalContentView: "global_pcb_content.view",
   globalContentEdit: "global_pcb_content.edit",
+  roadmapView: "roadmap.view",
+  roadmapCreate: "roadmap.create",
   deliveryView: "delivery.view",
   placementView: "placement.view",
   documentsView: "documents.view",

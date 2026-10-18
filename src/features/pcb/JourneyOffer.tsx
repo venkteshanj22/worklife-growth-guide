@@ -6,10 +6,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { changeCandidateStatus } from "@/lib/candidates/candidates.functions";
 
 /** Offers (never forces) a forward journey-status move after a PCB event. */
-export function JourneyOffer({ offer, onClose }: { offer: { candidateId: string; status: "PCB_PREPARATION" | "PCB_APPROVED" } | null; onClose: () => void }) {
+export function JourneyOffer({ offer, onClose }: { offer: { candidateId: string; status: "PCB_PREPARATION" | "PCB_APPROVED" | "ROADMAP_ACTIVE" } | null; onClose: () => void }) {
   const [busy, setBusy] = useState(false);
   const qc = useQueryClient();
-  const label = offer?.status === "PCB_APPROVED" ? "PCB Approved" : "PCB Preparation";
+  const label = offer?.status === "ROADMAP_ACTIVE" ? "Roadmap Active" : offer?.status === "PCB_APPROVED" ? "PCB Approved" : "PCB Preparation";
   return (
     <Dialog open={!!offer} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
@@ -23,7 +23,7 @@ export function JourneyOffer({ offer, onClose }: { offer: { candidateId: string;
             if (!offer) return;
             setBusy(true);
             try {
-              await changeCandidateStatus({ data: { id: offer.candidateId, status: offer.status, remarks: `Updated from PCB Studio` } });
+              await changeCandidateStatus({ data: { id: offer.candidateId, status: offer.status, remarks: offer.status === "ROADMAP_ACTIVE" ? "Updated from Roadmap" : "Updated from PCB Studio" } });
               toast.success(`Candidate moved to ${label}`);
               await qc.invalidateQueries();
               onClose();

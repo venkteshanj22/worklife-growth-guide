@@ -8,7 +8,7 @@ import { PERMISSIONS } from "./permissions";
 export interface NavLeaf {
   label: string;
   /** Functional route, or undefined for a Coming Soon placeholder. */
-  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active" | "/app/tracks" | "/app/pcb-content" | "/app/pcb" | "/app/pcb/library";
+  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active" | "/app/tracks" | "/app/pcb-content" | "/app/pcb" | "/app/pcb/library" | "/app/roadmaps";
   soon?: string;
   permission: string;
 }
@@ -40,7 +40,10 @@ export const STAFF_NAV: NavGroup[] = [
   },
   {
     label: "Delivery", icon: Truck, permission: PERMISSIONS.deliveryView,
-    children: ["Roadmaps", "Weekly Reviews", "Projects", "Premium Tasks"].map((l) => ({ label: l, soon: `delivery-${s(l)}`, permission: PERMISSIONS.deliveryView })),
+    children: [
+      { label: "Roadmaps", to: "/app/roadmaps", permission: PERMISSIONS.roadmapView },
+      ...["Weekly Reviews", "Projects", "Premium Tasks"].map((l) => ({ label: l, soon: `delivery-${s(l)}`, permission: PERMISSIONS.deliveryView })),
+    ],
   },
   {
     label: "Placement", icon: Briefcase, permission: PERMISSIONS.placementView,
