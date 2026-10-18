@@ -8,7 +8,7 @@ import { PERMISSIONS } from "./permissions";
 export interface NavLeaf {
   label: string;
   /** Functional route, or undefined for a Coming Soon placeholder. */
-  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active" | "/app/tracks" | "/app/pcb-content" | "/app/pcb" | "/app/pcb/library" | "/app/roadmaps";
+  to?: "/app/dashboard" | "/app/users" | "/app/roles" | "/app/audit" | "/app/settings" | "/app/candidates" | "/app/candidates/active" | "/app/tracks" | "/app/pcb-content" | "/app/pcb" | "/app/pcb/library" | "/app/roadmaps" | "/app/reviews" | "/app/projects" | "/app/tasks";
   soon?: string;
   permission: string;
 }
@@ -42,7 +42,9 @@ export const STAFF_NAV: NavGroup[] = [
     label: "Delivery", icon: Truck, permission: PERMISSIONS.deliveryView,
     children: [
       { label: "Roadmaps", to: "/app/roadmaps", permission: PERMISSIONS.roadmapView },
-      ...["Weekly Reviews", "Projects", "Premium Tasks"].map((l) => ({ label: l, soon: `delivery-${s(l)}`, permission: PERMISSIONS.deliveryView })),
+      { label: "Weekly Reviews", to: "/app/reviews", permission: PERMISSIONS.weeklyReviewView },
+      { label: "Projects", to: "/app/projects", permission: PERMISSIONS.projectView },
+      { label: "Premium Tasks", to: "/app/tasks", permission: PERMISSIONS.premiumTaskView },
     ],
   },
   {
@@ -80,14 +82,14 @@ export const SOON_PERMISSIONS: Record<string, string> = Object.fromEntries(
   ]),
 );
 
-export interface PortalNavItem { label: string; icon: LucideIcon; slug?: string }
+export interface PortalNavItem { label: string; icon: LucideIcon; slug?: string; premiumOnly?: boolean }
 export const PORTAL_NAV: PortalNavItem[] = [
   { label: "Home", icon: Home },
   { label: "My PCB", icon: Map, slug: "pcb" },
   { label: "My Roadmap", icon: RouteIcon, slug: "roadmap" },
   { label: "Weekly Progress", icon: CalendarCheck, slug: "weekly-progress" },
   { label: "Projects", icon: FolderKanban, slug: "projects" },
-  { label: "My Tasks", icon: ListChecks, slug: "tasks" },
+  { label: "My Tasks", icon: ListChecks, slug: "tasks", premiumOnly: true },
   { label: "My Resume", icon: FileUser, slug: "resume" },
   { label: "My Openings", icon: DoorOpen, slug: "openings" },
   { label: "Documents", icon: Folder, slug: "documents" },

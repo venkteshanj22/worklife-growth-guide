@@ -15,6 +15,7 @@ import {
 } from "@/lib/roadmaps/model";
 import { addRemark, roadmapAction, setItemPlannedDate, setItemStatus } from "@/lib/roadmaps/roadmaps.functions";
 import { roadmapQuery } from "./queries";
+import { breaksDayOrder } from "@/lib/execution/model";
 import { DateEditor, DayCard, ProgressBar, RemarkForm, RmBadge, resourceIndex, useRefreshRoadmaps } from "./parts";
 
 const TABS = ["Overview", "Daily Roadmap", "Resources", "Progress", "Activity"];
@@ -138,7 +139,7 @@ export function RoadmapDetailPage({ id }: { id: string }) {
                                       }}>{statusLabel(s)}</Button>
                                     ))}
                                   </div>
-                                  {can(user, "roadmap.edit") && <DateEditor value={it.planned_date} onSave={(d) => setItemPlannedDate({ data: { itemId: it.id, date: d, lock: it.lock_version } }).then(refresh)} />}
+                                  {can(user, "roadmap.edit") && <DateEditor value={it.planned_date} outOfOrder={(d) => breaksDayOrder(r.items, it.id, d)} onSave={(d) => setItemPlannedDate({ data: { itemId: it.id, date: d, lock: it.lock_version } }).then(refresh)} />}
                                   {can(user, "roadmap.notes") && <RemarkForm canInternal={can(user, "roadmap.internal_notes")} onAdd={(body, internal) => addRemark({ data: { itemId: it.id, body, internal } }).then(refresh)} />}
                                 </div>
                               )} />
