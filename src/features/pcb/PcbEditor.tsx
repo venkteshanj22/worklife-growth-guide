@@ -99,7 +99,7 @@ function EditorBody({ d }: { d: PcbDetail }) {
             summary={(m) => <><span className="mr-2 text-xs text-muted-foreground">{m.target_day ? `Day ${m.target_day}` : "—"}</span><span className="font-medium">{m.name}</span></>} />
         </TabsContent>
         <TabsContent value="Projects" className="mt-6">
-          <PcbList table="pcb_projects" noun="project" title="Projects" rows={v.pcb_projects} editable={editable} fields={PROJECT_FIELDS} defaults={{ project_type: "MINI" }}
+          <PcbList table="pcb_projects" noun="project" title="Projects" rows={v.pcb_projects} editable={editable} fields={PROJECT_FIELDS} defaults={{ project_type: "MINI_PROJECT" }}
             summary={(p) => <><span className="font-medium">{p.name}</span> <span className="ml-2 text-xs text-muted-foreground">{lbl(p.project_type)}{p.start_day ? ` · Day ${p.start_day}–${p.end_day ?? "?"}` : ""}</span>{p.scenario && <p className="text-xs text-muted-foreground">{p.scenario}</p>}</>} />
         </TabsContent>
         <TabsContent value="Weekly Plan" className="mt-6">
@@ -137,7 +137,7 @@ const GAP_FIELDS: FieldDef[] = [
   { key: "description", label: "Gap description", type: "textarea" }, { key: "action", label: "Recommended action", type: "textarea" },
 ];
 const PROJECT_FIELDS: FieldDef[] = [
-  { key: "name", label: "Project name", required: true }, { key: "project_type", label: "Type", type: "select", required: true, options: { MINI: "Mini", INTEGRATED: "Integrated", CAPSTONE: "Capstone", PORTFOLIO: "Portfolio" } },
+  { key: "name", label: "Project name", required: true }, { key: "project_type", label: "Type", type: "select", required: true, options: { PRACTICE_PROJECT: "Practice Project", MINI_PROJECT: "Mini Project", INTEGRATED: "Integrated Project", CAPSTONE: "Capstone", PORTFOLIO: "Portfolio" } },
   { key: "scenario", label: "Business scenario", type: "textarea" }, { key: "description", label: "Description", type: "textarea" },
   { key: "technologies", label: "Technologies", wide: true }, { key: "features", label: "Expected features", type: "textarea" }, { key: "deliverables", label: "Expected deliverables", type: "textarea" },
   { key: "start_day", label: "Suggested start day", type: "number" }, { key: "end_day", label: "Suggested completion day", type: "number" },
