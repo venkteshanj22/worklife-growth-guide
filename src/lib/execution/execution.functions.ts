@@ -150,7 +150,8 @@ export const candidateExecution = createServerFn({ method: "POST" })
     if (data.kind === "PROJECT" && rm) {
       const admin = await getAdmin();
       const { data: pp } = await admin.from("pcb_projects").select("id, name, project_type").eq("version_id", rm.pcb_version_id).order("sort_order");
-      const used = new Set(((rows ?? []) as { status: string; source_pcb_project_id?: string }[]).length ? (await s.from("candidate_projects").select("source_pcb_project_id, status").eq("candidate_id", data.candidateId).neq("status", "CANCELLED")).data?.map((x) => x.source_pcb_project_id) : []);
+      const { data: ex } = await s.from("candidate_projects").select("source_pcb_project_id").eq("candidate_id", data.candidateId).neq("status", "CANCELLED");
+      const used = new Set((ex ?? []).map((x) => x.source_pcb_project_id));
       sources = (pp ?? []).map((p) => ({ ...p, initialized: used.has(p.id) }));
     }
     const list = (rows ?? []) as (Any & { reviewer_id: string | null })[];
