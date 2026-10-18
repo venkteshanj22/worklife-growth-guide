@@ -43,6 +43,13 @@
       "when": 1792263387071,
       "tag": "0005_pcb_studio",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792337669110,
+      "tag": "0006_candidate_roadmap",
+      "breakpoints": true
     }
   ]
 }

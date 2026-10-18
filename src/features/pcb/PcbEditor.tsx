@@ -379,6 +379,7 @@ function WorkflowActions({ d }: { d: PcbDetail }) {
       {show("request_changes") && <Button size="sm" variant="outline" onClick={() => setDlg("request_changes")}>Request Changes</Button>}
       {show("submit") && <Button size="sm" onClick={() => setDlg("submit")}>Submit for Review</Button>}
       {show("approve") && <Button size="sm" onClick={() => setDlg("approve")}>Approve PCB</Button>}
+      {v.status === "APPROVED" && can(user, "roadmap.create") && <Button size="sm" variant="outline" asChild><Link to="/app/roadmaps/new" search={{ candidate: d.pcb.candidate_id }}>Create Roadmap</Link></Button>}
       {["APPROVED", "SUPERSEDED"].includes(v.status) && can(user, "pcb.version") && <Button size="sm" variant="outline" onClick={() => setDlg("version")}>Create New Version</Button>}
       <Dialog open={!!dlg} onOpenChange={(o) => !o && setDlg(null)}>
         <DialogContent>
