@@ -8,7 +8,7 @@ type Any = Record<string, unknown>;
 export interface RoadmapRef { id: string; code: string; candidate_id: string }
 
 /** Roadmap timeline entry; optional candidate activity and global audit (never note text). */
-export async function logRoadmap(admin: Admin, actor: Actor, r: RoadmapRef, event: string, opts: { audit?: string; candidate?: boolean; meta?: Any } = {}) {
+export async function logRoadmap(admin: Admin, actor: Actor, r: RoadmapRef, event: string, opts: { audit?: string | undefined; candidate?: boolean; meta?: Any } = {}) {
   const meta = { roadmap_id: r.code, ...opts.meta };
   await admin.from("candidate_roadmap_activity").insert({ roadmap_id: r.id, event, actor_id: actor.id, actor_name: actor.name, metadata: meta as never });
   await admin.from("candidate_roadmaps").update({ last_activity_at: new Date().toISOString() }).eq("id", r.id);

@@ -9,7 +9,7 @@ import { createRoadmap, roadmapCreatePreview, searchRoadmapCandidates } from "@/
 import { todayIST } from "@/lib/roadmaps/model";
 import { useRefreshRoadmaps } from "./parts";
 
-export function NewRoadmapPage({ candidate }: { candidate?: string }) {
+export function NewRoadmapPage({ candidate }: { candidate?: string | undefined }) {
   const [cid, setCid] = useState(candidate ?? "");
   const [q, setQ] = useState("");
   const [start, setStart] = useState(todayIST());
