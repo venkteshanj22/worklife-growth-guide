@@ -57,10 +57,13 @@ export function targetEndDate(start: string, learningDayCount: number, weeklyDay
 }
 
 /** Learning days d with from ≤ d < to. */
+/** Learning days after `from` up to and including `to` (the planned day itself is not "late"). */
 export function learningDaysBetween(from: string, to: string, weeklyDays: number) {
   const days = learningWeekdays(weeklyDays);
   let n = 0;
-  for (const d = toDate(from), end = toDate(to); d < end; d.setUTCDate(d.getUTCDate() + 1)) if (days.has(d.getUTCDay())) n++;
+  const d = toDate(from);
+  d.setUTCDate(d.getUTCDate() + 1);
+  for (const end = toDate(to); d <= end; d.setUTCDate(d.getUTCDate() + 1)) if (days.has(d.getUTCDay())) n++;
   return n;
 }
 
