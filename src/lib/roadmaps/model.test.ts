@@ -18,7 +18,7 @@ describe("roadmap scheduling", () => {
     expect(learningDates("2026-10-25", 1, 6)).toEqual(["2026-10-26"]);
   });
   it("target end date for 60 learning days at 6/week", () => {
-    expect(targetEndDate("2026-10-19", 60, 6)).toBe("2026-12-28");
+    expect(targetEndDate("2026-10-19", 60, 6)).toBe("2026-12-26");
   });
   it("items sharing a day number share a date", () => {
     const m = plannedDatesByDay("2026-10-19", [1, 1, 2], 6);
