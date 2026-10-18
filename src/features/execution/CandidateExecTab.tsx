@@ -43,8 +43,8 @@ export function CandidateExecTab({ kind, candidateId }: { kind: Kind; candidateI
           {d.rows.map((r) => (
             <div key={r.id} className="flex flex-wrap items-center gap-3 p-4">
               <Link to={to} params={{ id: r.id }} className="font-medium text-primary hover:underline">{r.code}</Link>
-              <span className="text-sm">{kind === "REVIEW" ? `Week ${String(r.week_number)}` : String(r.name)}</span>
-              <ExBadge status={r.status} />{kind === "REVIEW" && r.result ? <ExBadge status={r.result as string} /> : null}
+              <span className="text-sm">{kind === "REVIEW" ? `Week ${String(r["week_number"])}` : String(r["name"])}</span>
+              <ExBadge status={r.status} />{kind === "REVIEW" && r["result"] ? <ExBadge status={r["result"] as string} /> : null}
               {isOverdue(kind, r.status, due(r), d.today) && <Overdue />}
               <span className="ml-auto text-xs text-muted-foreground">{kind === "REVIEW" ? "Scheduled" : "Due"} {formatDate(due(r))}{r.reviewer ? ` · ${r.reviewer}` : ""}</span>
             </div>
@@ -59,7 +59,7 @@ export function CandidateExecTab({ kind, candidateId }: { kind: Kind; candidateI
 function CreateDialog({ kind, candidateId, data, onClose }: { kind: Kind; candidateId: string; data: CandidateExec; onClose: () => void }) {
   const refresh = useRefreshExec();
   const { busy, run } = useAction();
-  const nextWeek = data.rows.reduce((m, r) => Math.max(m, Number(r.week_number ?? 0)), 0) + 1;
+  const nextWeek = data.rows.reduce((m, r) => Math.max(m, Number(r["week_number"] ?? 0)), 0) + 1;
   const [f, setF] = useState({ week: String(nextWeek), start: "", end: "", date: data.today, reviewer: "", name: "", details: "", link: "" });
   const [sel, setSel] = useState<string[]>([]);
   const submit = () => run("create", async () => {

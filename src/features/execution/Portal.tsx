@@ -21,13 +21,13 @@ export function MyWeeklyPage() {
       <h1 className="text-2xl font-semibold">Weekly Progress</h1>
       {!data?.reviews.length ? <Empty icon={CalendarCheck} title="No weekly reviews yet" text="Your consultant's weekly reviews will appear here." /> : data.reviews.map((r) => (
         <Panel key={r.id} className="space-y-3 p-4">
-          <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">Week {r.week_number}</span><ExBadge status={r.status} />{r.result && <ExBadge status={r.result} />}
-            <span className="ml-auto text-xs text-muted-foreground">{formatDate(r.actual_date ?? r.scheduled_date)}</span></div>
+          <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">Week {r["week_number"]}</span><ExBadge status={r.status} />{r["result"] && <ExBadge status={r["result"]} />}
+            <span className="ml-auto text-xs text-muted-foreground">{formatDate(r["actual_date"] ?? r["scheduled_date"])}</span></div>
           {r.status === "COMPLETED" && <>
-            {r.snap_progress != null && <p className="text-sm text-muted-foreground">Roadmap progress at review: <span className="font-medium text-foreground">{r.snap_progress}%</span></p>}
+            {r["snap_progress"] != null && <p className="text-sm text-muted-foreground">Roadmap progress at review: <span className="font-medium text-foreground">{r["snap_progress"]}%</span></p>}
             <div className="grid gap-3 sm:grid-cols-2">
-              <Info label="Key Progress" value={r.key_progress} /><Info label="Areas to Improve" value={r.improvement_areas} />
-              <Info label="Feedback" value={r.candidate_feedback} /><Info label="Next Week Plan" value={r.next_week_plan} />
+              <Info label="Key Progress" value={r["key_progress"]} /><Info label="Areas to Improve" value={r["improvement_areas"]} />
+              <Info label="Feedback" value={r.candidate_feedback} /><Info label="Next Week Plan" value={r["next_week_plan"]} />
             </div>
           </>}
         </Panel>
@@ -55,8 +55,8 @@ function WorkCard({ kind, r, today }: { kind: "PROJECT" | "TASK"; r: Row; today:
   const refresh = useRefreshExec();
   const { busy, run } = useAction();
   const [open, setOpen] = useState(false);
-  const [f, setF] = useState({ github: r.github_url ?? "", live: r.live_url ?? "", notes: (kind === "PROJECT" ? r.submission_notes : r.submission) ?? "", link: r.submission_link ?? "" });
-  const due = kind === "PROJECT" ? r.planned_due_date : r.due_date;
+  const [f, setF] = useState({ github: r["github_url"] ?? "", live: r["live_url"] ?? "", notes: (kind === "PROJECT" ? r["submission_notes"] : r["submission"]) ?? "", link: r["submission_link"] ?? "" });
+  const due = kind === "PROJECT" ? r["planned_due_date"] : r["due_date"];
   const canStart = r.status === (kind === "PROJECT" ? "NOT_STARTED" : "ASSIGNED");
   const submitAction = r.status === "IN_PROGRESS" ? "submit" : r.status === "CHANGES_REQUESTED" ? "resubmit" : null;
   const act = (action: "start" | "submit" | "resubmit") => run(action, () => myWorkAction({ data: {
@@ -66,13 +66,13 @@ function WorkCard({ kind, r, today }: { kind: "PROJECT" | "TASK"; r: Row; today:
     <Panel className="space-y-3 p-4">
       <button type="button" className="w-full text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
         <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{r.name}</span><ExBadge status={r.status} />{isOverdue(kind, r.status, due, today) && <Overdue />}</div>
-        <p className="mt-1 text-xs text-muted-foreground">{kind === "PROJECT" && r.project_type ? `${r.project_type} · ` : ""}Due {formatDate(due)}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{kind === "PROJECT" && r["project_type"] ? `${r["project_type"]} · ` : ""}Due {formatDate(due)}</p>
       </button>
       {open && (
         <div className="space-y-3 border-t pt-3">
           {kind === "PROJECT"
-            ? ([["Business Scenario", r.scenario], ["Description", r.description], ["Objectives", r.objectives], ["Technology", r.technologies], ["Expected Deliverables", r.deliverables]] as const).filter(([, v]) => v).map(([l, v]) => <Info key={l} label={l} value={v} />)
-            : <>{r.details && <Info label="Details" value={r.details} />}{r.resource_link && <Info label="Resource" value={<a href={r.resource_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary">Open<ExternalLink className="size-3" /></a>} />}</>}
+            ? ([["Business Scenario", r["scenario"]], ["Description", r["description"]], ["Objectives", r["objectives"]], ["Technology", r["technologies"]], ["Expected Deliverables", r["deliverables"]]] as const).filter(([, v]) => v).map(([l, v]) => <Info key={l} label={l} value={v} />)
+            : <>{r["details"] && <Info label="Details" value={r["details"]} />}{r["resource_link"] && <Info label="Resource" value={<a href={r["resource_link"]} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary">Open<ExternalLink className="size-3" /></a>} />}</>}
           {r.feedback.length > 0 && (
             <div className="space-y-2"><p className="text-xs font-medium text-muted-foreground">Reviewer feedback</p>
               {r.feedback.map((x, i) => <div key={i} className="rounded-md border p-2 text-sm"><p className="whitespace-pre-wrap">{x.candidate_feedback}</p><p className="mt-1 text-xs text-muted-foreground">{label(x.outcome)} · {formatDate(x.created_at, true)}</p></div>)}</div>
@@ -86,10 +86,10 @@ function WorkCard({ kind, r, today }: { kind: "PROJECT" | "TASK"; r: Row; today:
               <Field label={kind === "PROJECT" ? "Submission notes" : "Your submission"}><Textarea rows={3} value={f.notes} onChange={(e) => setF({ ...f, notes: e.target.value })} /></Field>
               <Button size="lg" className="w-full sm:w-auto" disabled={!!busy} onClick={() => act(submitAction)}>{busy ? "Submitting…" : submitAction === "submit" ? `Submit ${kind === "PROJECT" ? "Project" : "Task"}` : "Resubmit"}</Button>
             </div>
-          ) : (kind === "PROJECT" ? r.github_url : r.submission || r.submission_link) && (
+          ) : (kind === "PROJECT" ? r["github_url"] : r["submission"] || r["submission_link"]) && (
             <div className="grid gap-2 text-sm">
-              {kind === "PROJECT" ? <><Info label="GitHub" value={r.github_url} />{r.live_url && <Info label="Live" value={r.live_url} />}{r.submission_notes && <Info label="Notes" value={r.submission_notes} />}</>
-                : <><Info label="Submission" value={r.submission} />{r.submission_link && <Info label="Link" value={r.submission_link} />}</>}
+              {kind === "PROJECT" ? <><Info label="GitHub" value={r["github_url"]} />{r["live_url"] && <Info label="Live" value={r["live_url"]} />}{r["submission_notes"] && <Info label="Notes" value={r["submission_notes"]} />}</>
+                : <><Info label="Submission" value={r["submission"]} />{r["submission_link"] && <Info label="Link" value={r["submission_link"]} />}</>}
             </div>
           )}
           {canStart && <Button size="lg" className="w-full sm:w-auto" disabled={!!busy} onClick={() => act("start")}>{busy ? "Starting…" : kind === "PROJECT" ? "Start Project" : "Start Task"}</Button>}
