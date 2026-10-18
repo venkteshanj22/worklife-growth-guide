@@ -977,6 +977,223 @@ export type Database = {
           },
         ]
       }
+      candidate_execution_counters: {
+        Row: {
+          candidate_id: string
+          kind: string
+          last_value: number
+        }
+        Insert: {
+          candidate_id: string
+          kind: string
+          last_value?: number
+        }
+        Update: {
+          candidate_id?: string
+          kind?: string
+          last_value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_execution_counters_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_execution_history: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          candidate_id: string
+          created_at: string
+          event: string
+          from_status: string | null
+          id: string
+          kind: string
+          reason: string | null
+          record_id: string
+          to_status: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          candidate_id: string
+          created_at?: string
+          event: string
+          from_status?: string | null
+          id?: string
+          kind: string
+          reason?: string | null
+          record_id: string
+          to_status?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          candidate_id?: string
+          created_at?: string
+          event?: string
+          from_status?: string | null
+          id?: string
+          kind?: string
+          reason?: string | null
+          record_id?: string
+          to_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_execution_history_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_execution_internal: {
+        Row: {
+          candidate_id: string
+          kind: string
+          notes: string | null
+          record_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          candidate_id: string
+          kind: string
+          notes?: string | null
+          record_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          candidate_id?: string
+          kind?: string
+          notes?: string | null
+          record_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_execution_internal_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_execution_reviews: {
+        Row: {
+          attempt: number | null
+          candidate_feedback: string | null
+          candidate_id: string
+          created_at: string
+          id: string
+          improvement_areas: string | null
+          kind: string
+          outcome: string
+          ratings: Json
+          record_id: string
+          reviewer_id: string | null
+          reviewer_name: string | null
+          reviewer_remarks: string | null
+          strengths: string | null
+        }
+        Insert: {
+          attempt?: number | null
+          candidate_feedback?: string | null
+          candidate_id: string
+          created_at?: string
+          id?: string
+          improvement_areas?: string | null
+          kind: string
+          outcome: string
+          ratings?: Json
+          record_id: string
+          reviewer_id?: string | null
+          reviewer_name?: string | null
+          reviewer_remarks?: string | null
+          strengths?: string | null
+        }
+        Update: {
+          attempt?: number | null
+          candidate_feedback?: string | null
+          candidate_id?: string
+          created_at?: string
+          id?: string
+          improvement_areas?: string | null
+          kind?: string
+          outcome?: string
+          ratings?: Json
+          record_id?: string
+          reviewer_id?: string | null
+          reviewer_name?: string | null
+          reviewer_remarks?: string | null
+          strengths?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_execution_reviews_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_execution_submissions: {
+        Row: {
+          attempt: number
+          candidate_id: string
+          github_url: string | null
+          id: string
+          kind: string
+          link: string | null
+          live_url: string | null
+          notes: string | null
+          record_id: string
+          submitted_at: string
+        }
+        Insert: {
+          attempt: number
+          candidate_id: string
+          github_url?: string | null
+          id?: string
+          kind: string
+          link?: string | null
+          live_url?: string | null
+          notes?: string | null
+          record_id: string
+          submitted_at?: string
+        }
+        Update: {
+          attempt?: number
+          candidate_id?: string
+          github_url?: string | null
+          id?: string
+          kind?: string
+          link?: string | null
+          live_url?: string | null
+          notes?: string | null
+          record_id?: string
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_execution_submissions_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidate_pcbs: {
         Row: {
           candidate_id: string
@@ -1087,6 +1304,112 @@ export type Database = {
           },
         ]
       }
+      candidate_premium_tasks: {
+        Row: {
+          assigned_by: string | null
+          assigned_by_name: string | null
+          assigned_date: string
+          cancel_reason: string | null
+          candidate_feedback: string | null
+          candidate_id: string
+          code: string
+          completed_at: string | null
+          created_at: string
+          details: string | null
+          due_date: string | null
+          id: string
+          last_activity_at: string
+          lock_version: number
+          name: string
+          resource_link: string | null
+          reviewer_id: string | null
+          reviewer_remarks: string | null
+          roadmap_id: string | null
+          started_at: string | null
+          status: string
+          submission: string | null
+          submission_link: string | null
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          assigned_by_name?: string | null
+          assigned_date?: string
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id: string
+          code: string
+          completed_at?: string | null
+          created_at?: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          last_activity_at?: string
+          lock_version?: number
+          name: string
+          resource_link?: string | null
+          reviewer_id?: string | null
+          reviewer_remarks?: string | null
+          roadmap_id?: string | null
+          started_at?: string | null
+          status?: string
+          submission?: string | null
+          submission_link?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_by?: string | null
+          assigned_by_name?: string | null
+          assigned_date?: string
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id?: string
+          code?: string
+          completed_at?: string | null
+          created_at?: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          last_activity_at?: string
+          lock_version?: number
+          name?: string
+          resource_link?: string | null
+          reviewer_id?: string | null
+          reviewer_remarks?: string | null
+          roadmap_id?: string | null
+          started_at?: string | null
+          status?: string
+          submission?: string | null
+          submission_link?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_premium_tasks_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_premium_tasks_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_premium_tasks_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidate_program_plans: {
         Row: {
           is_active: boolean
@@ -1107,6 +1430,139 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      candidate_projects: {
+        Row: {
+          actual_start_date: string | null
+          cancel_reason: string | null
+          candidate_feedback: string | null
+          candidate_id: string
+          code: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          deliverables: string | null
+          description: string | null
+          github_url: string | null
+          id: string
+          last_activity_at: string
+          live_url: string | null
+          lock_version: number
+          name: string
+          objectives: string | null
+          planned_due_date: string | null
+          planned_start_date: string | null
+          project_type: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          reviewer_remarks: string | null
+          roadmap_id: string | null
+          scenario: string | null
+          source_pcb_code: string | null
+          source_pcb_project_id: string | null
+          source_pcb_version: number | null
+          source_pcb_version_id: string | null
+          status: string
+          submission_notes: string | null
+          submitted_at: string | null
+          technologies: string | null
+          updated_at: string
+        }
+        Insert: {
+          actual_start_date?: string | null
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id: string
+          code: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          deliverables?: string | null
+          description?: string | null
+          github_url?: string | null
+          id?: string
+          last_activity_at?: string
+          live_url?: string | null
+          lock_version?: number
+          name: string
+          objectives?: string | null
+          planned_due_date?: string | null
+          planned_start_date?: string | null
+          project_type?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_remarks?: string | null
+          roadmap_id?: string | null
+          scenario?: string | null
+          source_pcb_code?: string | null
+          source_pcb_project_id?: string | null
+          source_pcb_version?: number | null
+          source_pcb_version_id?: string | null
+          status?: string
+          submission_notes?: string | null
+          submitted_at?: string | null
+          technologies?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actual_start_date?: string | null
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id?: string
+          code?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          deliverables?: string | null
+          description?: string | null
+          github_url?: string | null
+          id?: string
+          last_activity_at?: string
+          live_url?: string | null
+          lock_version?: number
+          name?: string
+          objectives?: string | null
+          planned_due_date?: string | null
+          planned_start_date?: string | null
+          project_type?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_remarks?: string | null
+          roadmap_id?: string | null
+          scenario?: string | null
+          source_pcb_code?: string | null
+          source_pcb_project_id?: string | null
+          source_pcb_version?: number | null
+          source_pcb_version_id?: string | null
+          status?: string
+          submission_notes?: string | null
+          submitted_at?: string | null
+          technologies?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_projects_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_projects_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_projects_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       candidate_roadmap_activity: {
         Row: {
@@ -1800,6 +2256,217 @@ export type Database = {
             columns: ["changed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_weekly_review_items: {
+        Row: {
+          answer: boolean | null
+          candidate_id: string
+          id: string
+          label: string
+          review_id: string
+          sort_order: number
+        }
+        Insert: {
+          answer?: boolean | null
+          candidate_id: string
+          id?: string
+          label: string
+          review_id: string
+          sort_order?: number
+        }
+        Update: {
+          answer?: boolean | null
+          candidate_id?: string
+          id?: string
+          label?: string
+          review_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_weekly_review_items_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_weekly_review_items_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_weekly_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_weekly_reviews: {
+        Row: {
+          actual_date: string | null
+          cancel_reason: string | null
+          candidate_feedback: string | null
+          candidate_id: string
+          clarification_topics: string | null
+          code: string
+          completed_at: string | null
+          completed_by: string | null
+          consultant_remarks: string | null
+          corrected_at: string | null
+          corrected_by: string | null
+          correction_reason: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          improvement_areas: string | null
+          key_progress: string | null
+          last_activity_at: string
+          lock_version: number
+          missed_at: string | null
+          missed_by: string | null
+          missed_reason: string | null
+          next_week_plan: string | null
+          period_end: string | null
+          period_start: string | null
+          result: string | null
+          review_number: number
+          reviewer_id: string | null
+          roadblocks: string | null
+          roadmap_id: string | null
+          scheduled_date: string
+          snap_completed: number | null
+          snap_health: string | null
+          snap_in_progress: number | null
+          snap_overdue: number | null
+          snap_pending: number | null
+          snap_progress: number | null
+          source_pcb_code: string | null
+          source_pcb_version: number | null
+          source_pcb_version_id: string | null
+          source_review_template_id: string | null
+          started_at: string | null
+          status: string
+          strengths: string | null
+          updated_at: string
+          week_number: number
+        }
+        Insert: {
+          actual_date?: string | null
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id: string
+          clarification_topics?: string | null
+          code: string
+          completed_at?: string | null
+          completed_by?: string | null
+          consultant_remarks?: string | null
+          corrected_at?: string | null
+          corrected_by?: string | null
+          correction_reason?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          improvement_areas?: string | null
+          key_progress?: string | null
+          last_activity_at?: string
+          lock_version?: number
+          missed_at?: string | null
+          missed_by?: string | null
+          missed_reason?: string | null
+          next_week_plan?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          result?: string | null
+          review_number: number
+          reviewer_id?: string | null
+          roadblocks?: string | null
+          roadmap_id?: string | null
+          scheduled_date: string
+          snap_completed?: number | null
+          snap_health?: string | null
+          snap_in_progress?: number | null
+          snap_overdue?: number | null
+          snap_pending?: number | null
+          snap_progress?: number | null
+          source_pcb_code?: string | null
+          source_pcb_version?: number | null
+          source_pcb_version_id?: string | null
+          source_review_template_id?: string | null
+          started_at?: string | null
+          status?: string
+          strengths?: string | null
+          updated_at?: string
+          week_number: number
+        }
+        Update: {
+          actual_date?: string | null
+          cancel_reason?: string | null
+          candidate_feedback?: string | null
+          candidate_id?: string
+          clarification_topics?: string | null
+          code?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          consultant_remarks?: string | null
+          corrected_at?: string | null
+          corrected_by?: string | null
+          correction_reason?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          improvement_areas?: string | null
+          key_progress?: string | null
+          last_activity_at?: string
+          lock_version?: number
+          missed_at?: string | null
+          missed_by?: string | null
+          missed_reason?: string | null
+          next_week_plan?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          result?: string | null
+          review_number?: number
+          reviewer_id?: string | null
+          roadblocks?: string | null
+          roadmap_id?: string | null
+          scheduled_date?: string
+          snap_completed?: number | null
+          snap_health?: string | null
+          snap_in_progress?: number | null
+          snap_overdue?: number | null
+          snap_pending?: number | null
+          snap_progress?: number | null
+          source_pcb_code?: string | null
+          source_pcb_version?: number | null
+          source_pcb_version_id?: string | null
+          source_review_template_id?: string | null
+          started_at?: string | null
+          status?: string
+          strengths?: string | null
+          updated_at?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_weekly_reviews_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_weekly_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_weekly_reviews_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_roadmaps"
             referencedColumns: ["id"]
           },
         ]
@@ -4062,6 +4729,10 @@ export type Database = {
         Args: { _cid: string }
         Returns: boolean
       }
+      can_read_execution: {
+        Args: { _cid: string; _kind: string }
+        Returns: boolean
+      }
       can_read_pcb_candidate: { Args: { _cid: string }; Returns: boolean }
       can_read_pcb_version: { Args: { _vid: string }; Returns: boolean }
       can_read_roadmap: { Args: { _rid: string }; Returns: boolean }
@@ -4104,6 +4775,10 @@ export type Database = {
         Returns: undefined
       }
       current_user_context: { Args: never; Returns: Json }
+      execution_next_seq: {
+        Args: { _cid: string; _kind: string }
+        Returns: number
+      }
       has_permission: { Args: { _key: string; _uid: string }; Returns: boolean }
       is_active_user: { Args: { _uid: string }; Returns: boolean }
       pcb_copy_children: {
