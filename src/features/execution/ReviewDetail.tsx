@@ -18,11 +18,25 @@ const TEXTS = [
 ] as const;
 const NONE = "__none";
 
+type ReviewRec = Record<string, string | number | null> & {
+  id: string; code: string; status: string; lock_version: number;
+  candidate_id: string; week_number: number;
+  result: string | null; reviewer_id: string | null;
+  scheduled_date: string | null; actual_date: string | null;
+  period_start: string | null; period_end: string | null;
+  source_pcb_code: string | null; source_pcb_version: number | null; source_review_template_id: string | null;
+  missed_reason: string | null; missed_by: string | null; missed_at: string | null;
+  cancel_reason: string | null;
+  corrected_at: string | null; correction_reason: string | null; corrected_by: string | null;
+  snap_progress: number | null; snap_completed: number | null; snap_in_progress: number | null;
+  snap_pending: number | null; snap_overdue: number | null; snap_health: string | null;
+};
+
 export function ReviewDetailPage({ id }: { id: string }) {
   const { data: d } = useSuspenseQuery(execQuery("REVIEW", id));
   const { can } = useCurrentUser();
   const refresh = useRefreshExec();
-  const r = d.record as Record<string, string | number | null> & { id: string; code: string; status: string; lock_version: number };
+  const r = d.record as ReviewRec;
   const editable = reviewEditable(r.status) && can("weekly_review.edit");
   const correctable = r.status === "COMPLETED" && can("weekly_review.correct");
   const [correcting, setCorrecting] = useState(false);
